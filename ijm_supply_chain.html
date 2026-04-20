@@ -107,6 +107,51 @@
   .cta-btn:hover { background: var(--mid); }
   .cta-link { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.4); text-decoration: none; text-align: right; }
   .cta-link:hover { color: var(--white); }
+
+  /* ── SCANNING / READABILITY LAYER ── */
+  .scan-label {
+    font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--blue); margin-bottom: 6px; display: block;
+  }
+  .scan-headline {
+    font-family: 'Playfair Display', serif; font-size: clamp(22px,3vw,32px);
+    font-weight: 900; color: var(--ink); line-height: 1.2;
+    letter-spacing: -0.01em; margin-bottom: 12px;
+  }
+  .scan-sub {
+    font-size: 14px; font-weight: 300; color: var(--muted);
+    line-height: 1.8; margin-bottom: 0;
+  }
+  .callout {
+    background: var(--light); border-left: 3px solid var(--blue);
+    border-radius: 0 var(--pill-sm) var(--pill-sm) 0;
+    padding: 14px 18px; margin: 16px 0;
+    font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.65;
+  }
+  .callout.amber { background: var(--amber-light); border-left-color: var(--amber); }
+  .callout.green { background: #E6F4ED; border-left-color: #1A7A4A; color: #1A4A2A; }
+  .highlight { color: var(--blue); font-weight: 600; }
+  .highlight.amber { color: var(--amber); }
+  .stat-inline {
+    font-family: 'Playfair Display', serif; font-size: 1.4em;
+    font-weight: 700; color: var(--blue); line-height: 1;
+  }
+  .proof-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--light); color: var(--blue);
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 3px 9px;
+    border-radius: var(--pill-sm); margin: 2px 2px 2px 0;
+  }
+  .proof-tag.amber { background: var(--amber-light); color: #C05E10; }
+  .proof-tag.green { background: #E6F4ED; color: #1A7A4A; }
+  .section-intro-bold {
+    font-size: 15px; font-weight: 600; color: var(--ink);
+    line-height: 1.6; margin-bottom: 10px;
+  }
+  strong { color: var(--ink); }
+
 </style>
 </head>
 <body>
@@ -126,7 +171,8 @@
   <div>
     <div class="hero-eyebrow">IJM Supply Chain Justice Partnership</div>
     <h1 class="hero-title">Your supply chain<br>story needs to be<br><em>verifiable.</em></h1>
-    <p class="hero-sub">Regulatory pressure is accelerating. Investors are asking harder questions. IJM embeds directly in your supply chain audit process — providing on-the-ground remediation support and producing independently verified human rights reports you can stand behind.</p>
+    <p class="hero-sub">Regulatory pressure is accelerating. Investors are asking harder questions. <strong>IJM embeds in your supply chain audit process</strong> — on-the-ground remediation, independently verified reports you can stand behind.</p>
+    <div class="callout amber"><strong>Why now:</strong> The EU CS3D directive requires verified human rights due diligence for large companies <strong>starting 2026.</strong> IJM has on-the-ground remediation capacity in 14 countries that no other human rights org can match. The window to get ahead of this is closing.</div>
     <div class="hero-actions">
       <a href="#" class="btn-primary">Talk to our team</a>
       <a href="#" class="btn-ghost">Download framework →</a>
@@ -171,7 +217,8 @@
 <div class="section">
   <div class="section-label">What we offer</div>
   <h2 class="section-title">Not a logo on a website.<br>A <em>verifiable</em> human rights program.</h2>
-  <p class="section-sub">IJM doesn't provide certifications. We provide on-the-ground presence, remediation support, and independently audited outcome reports — the kind of evidence that withstands regulatory scrutiny and investor due diligence.</p>
+  <div class="callout" style="margin-bottom:24px"><strong>The key differentiator:</strong> Every other org offers monitoring and certification. IJM offers on-the-ground remediation — actual people in-country fixing the problem, not just documenting it. That's the moat.</div>
+    <p class="section-sub">IJM doesn't provide certifications. We provide on-the-ground presence, remediation support, and independently audited outcome reports — the kind of evidence that withstands regulatory scrutiny and investor due diligence.</p>
   <div class="offer-grid">
     <div class="offer-card">
       <div class="offer-num">01</div>
@@ -180,27 +227,27 @@
     </div>
     <div class="offer-card">
       <div class="offer-num">02</div>
-      <div class="offer-title">Active remediation support</div>
+      <div class="offer-title"><strong>Active remediation support</strong></div>
       <div class="offer-body">Where exposure is identified, IJM works alongside your suppliers and local authorities to address root causes — training, legal support, worker protection protocols. This is what separates a remediation program from a monitoring program.</div>
     </div>
     <div class="offer-card">
       <div class="offer-num">03</div>
-      <div class="offer-title">Verified annual reporting</div>
+      <div class="offer-title"><strong>Verified annual reporting</strong></div>
       <div class="offer-body">An independently audited annual report covering assessment findings, remediation progress, and verified outcome metrics — produced to a standard your General Counsel, CSO, and investors can rely on and regulators can't challenge.</div>
     </div>
     <div class="offer-card">
       <div class="offer-num">04</div>
-      <div class="offer-title">Regulatory response support</div>
+      <div class="offer-title"><strong>Regulatory response support</strong></div>
       <div class="offer-body">When a regulator, investor, or journalist asks about your supply chain human rights practices, IJM's documentation and methodology provides the credible, defensible answer. We have testified before regulatory bodies on behalf of partner companies.</div>
     </div>
     <div class="offer-card">
       <div class="offer-num">05</div>
-      <div class="offer-title">Employee engagement program</div>
+      <div class="offer-title"><strong>Employee engagement program</strong></div>
       <div class="offer-body">IJM provides a structured employee education and engagement program — giving your workforce a meaningful connection to the supply chain justice work happening on their behalf. High retention and purpose correlation in partner companies.</div>
     </div>
     <div class="offer-card">
       <div class="offer-num">06</div>
-      <div class="offer-title">Co-branded impact publication</div>
+      <div class="offer-title"><strong>Co-branded impact publication</strong></div>
       <div class="offer-body">An annual co-branded impact report — featuring your company's specific supply chain program, verified outcomes, and IJM's independent methodology statement. Designed for investor relations, ESG disclosure, and external stakeholder communication.</div>
     </div>
   </div>
@@ -276,7 +323,7 @@
 
 <div class="cta-band">
   <div>
-    <div class="cta-title">The window for getting ahead of this<br>is narrowing. Let's talk.</div>
+    <div class="cta-title"><strong>The window for getting ahead of this is narrowing.</strong><br>Let's talk.</div>
     <div class="cta-sub">IJM's supply chain team works with a limited number of corporate partners each year to ensure program quality and on-the-ground capacity. If you're evaluating your human rights due diligence posture for 2026, the conversation is worth having now.</div>
   </div>
   <div class="cta-actions">

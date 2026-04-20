@@ -267,6 +267,51 @@
   .rect-stat-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.28); margin-bottom: 2px; }
   .rect-stat-val { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--white); }
   .rect-cta { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; background: var(--blue); color: var(--white); padding: 8px 14px; border-radius: var(--pill-sm); cursor: pointer; }
+
+  /* ── SCANNING / READABILITY LAYER ── */
+  .scan-label {
+    font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--blue); margin-bottom: 6px; display: block;
+  }
+  .scan-headline {
+    font-family: 'Playfair Display', serif; font-size: clamp(22px,3vw,32px);
+    font-weight: 900; color: var(--ink); line-height: 1.2;
+    letter-spacing: -0.01em; margin-bottom: 12px;
+  }
+  .scan-sub {
+    font-size: 14px; font-weight: 300; color: var(--muted);
+    line-height: 1.8; margin-bottom: 0;
+  }
+  .callout {
+    background: var(--light); border-left: 3px solid var(--blue);
+    border-radius: 0 var(--pill-sm) var(--pill-sm) 0;
+    padding: 14px 18px; margin: 16px 0;
+    font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.65;
+  }
+  .callout.amber { background: var(--amber-light); border-left-color: var(--amber); }
+  .callout.green { background: #E6F4ED; border-left-color: #1A7A4A; color: #1A4A2A; }
+  .highlight { color: var(--blue); font-weight: 600; }
+  .highlight.amber { color: var(--amber); }
+  .stat-inline {
+    font-family: 'Playfair Display', serif; font-size: 1.4em;
+    font-weight: 700; color: var(--blue); line-height: 1;
+  }
+  .proof-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--light); color: var(--blue);
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 3px 9px;
+    border-radius: var(--pill-sm); margin: 2px 2px 2px 0;
+  }
+  .proof-tag.amber { background: var(--amber-light); color: #C05E10; }
+  .proof-tag.green { background: #E6F4ED; color: #1A7A4A; }
+  .section-intro-bold {
+    font-size: 15px; font-weight: 600; color: var(--ink);
+    line-height: 1.6; margin-bottom: 10px;
+  }
+  strong { color: var(--ink); }
+
 </style>
 </head>
 <body>

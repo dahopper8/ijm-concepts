@@ -164,6 +164,51 @@
   .comp-row-val { font-weight: 500; color: var(--ink); }
   .comp-row-val.positive { color: var(--green); }
   .comp-row-val.negative { color: var(--muted); font-weight: 300; }
+
+  /* ── SCANNING / READABILITY LAYER ── */
+  .scan-label {
+    font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--blue); margin-bottom: 6px; display: block;
+  }
+  .scan-headline {
+    font-family: 'Playfair Display', serif; font-size: clamp(22px,3vw,32px);
+    font-weight: 900; color: var(--ink); line-height: 1.2;
+    letter-spacing: -0.01em; margin-bottom: 12px;
+  }
+  .scan-sub {
+    font-size: 14px; font-weight: 300; color: var(--muted);
+    line-height: 1.8; margin-bottom: 0;
+  }
+  .callout {
+    background: var(--light); border-left: 3px solid var(--blue);
+    border-radius: 0 var(--pill-sm) var(--pill-sm) 0;
+    padding: 14px 18px; margin: 16px 0;
+    font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.65;
+  }
+  .callout.amber { background: var(--amber-light); border-left-color: var(--amber); }
+  .callout.green { background: #E6F4ED; border-left-color: #1A7A4A; color: #1A4A2A; }
+  .highlight { color: var(--blue); font-weight: 600; }
+  .highlight.amber { color: var(--amber); }
+  .stat-inline {
+    font-family: 'Playfair Display', serif; font-size: 1.4em;
+    font-weight: 700; color: var(--blue); line-height: 1;
+  }
+  .proof-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--light); color: var(--blue);
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 3px 9px;
+    border-radius: var(--pill-sm); margin: 2px 2px 2px 0;
+  }
+  .proof-tag.amber { background: var(--amber-light); color: #C05E10; }
+  .proof-tag.green { background: #E6F4ED; color: #1A7A4A; }
+  .section-intro-bold {
+    font-size: 15px; font-weight: 600; color: var(--ink);
+    line-height: 1.6; margin-bottom: 10px;
+  }
+  strong { color: var(--ink); }
+
 </style>
 </head>
 <body>
@@ -179,7 +224,7 @@
     <h1 class="hero-title">Your community.<br>Their <em>justice system.</em><br>Until the work is done.</h1>
     <p class="hero-sub">Sponsor a named community in active transformation. Receive quarterly field dispatches as the justice system grows stronger. And when IJM withdraws — because the community can protect itself — you'll know. That's the moment your sponsorship was always building toward.</p>
     <div class="hero-distinction">
-      <div class="hero-distinction-text">This is not a donation. It's a relationship with a place — a named district, a named field team, a named milestone. <strong>When IJM leaves because the work is done, your community graduates.</strong> That ending is the point.</div>
+      <div class="hero-distinction-text"><strong>This is not a donation.</strong> It's a relationship with a place — a named district, a named field team, a named milestone. When IJM leaves because the work is done, your community graduates. <strong>That ending is the point.</strong></div>
     </div>
   </div>
 
@@ -220,7 +265,8 @@
 
 <div class="main">
   <div>
-    <div class="section-label">Communities available for sponsorship</div>
+    <div class="section-label">Select a community to sponsor</div>
+    <div class="callout amber" style="margin-bottom:20px"><strong>GTM note:</strong> This is an upgrade path for existing Freedom Partners — not cold acquisition. Gift officers introduce it during existing donor conversations. No new channel required.</div>
     <div class="community-grid">
 
       <div class="community-card selected" onclick="selectCommunity(this,'Pampanga District','Cebu, Philippines · Child sex trafficking','84','fill-green','high','+6 this quarter','72%','22 of est. 26')">
@@ -403,7 +449,7 @@
       <div class="comp-row"><div class="comp-row-label">Relationship with</div><div class="comp-row-val">A named individual</div></div>
       <div class="comp-row"><div class="comp-row-label">Timeline</div><div class="comp-row-val negative">Open-ended</div></div>
       <div class="comp-row"><div class="comp-row-label">Outcome verification</div><div class="comp-row-val negative">Self-reported</div></div>
-      <div class="comp-row"><div class="comp-row-label">Closing moment</div><div class="comp-row-val negative">None — relationship lapses</div></div>
+      <div class="comp-row"><div class="comp-row-label">Closing moment</div><div class="comp-row-val negative" style="font-style:italic">None — relationship lapses</div></div>
       <div class="comp-row"><div class="comp-row-label">What success looks like</div><div class="comp-row-val negative">Ongoing dependency</div></div>
     </div>
     <div class="comp-card ours">
@@ -412,8 +458,8 @@
       <div class="comp-row"><div class="comp-row-label">Relationship with</div><div class="comp-row-val positive">A named community</div></div>
       <div class="comp-row"><div class="comp-row-label">Timeline</div><div class="comp-row-val positive">Program to verified graduation</div></div>
       <div class="comp-row"><div class="comp-row-label">Outcome verification</div><div class="comp-row-val positive">Third-party audited</div></div>
-      <div class="comp-row"><div class="comp-row-label">Closing moment</div><div class="comp-row-val positive">Graduation — community is free</div></div>
-      <div class="comp-row"><div class="comp-row-label">What success looks like</div><div class="comp-row-val positive">IJM leaves. Justice stays.</div></div>
+      <div class="comp-row"><div class="comp-row-label">Closing moment</div><div class="comp-row-val positive"><strong>Graduation — community is free</strong></div></div>
+      <div class="comp-row"><div class="comp-row-label">What success looks like</div><div class="comp-row-val positive"><strong>IJM leaves. Justice stays.</strong></div></div>
     </div>
   </div>
 </div>

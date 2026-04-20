@@ -115,6 +115,51 @@
   .gp-stat { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 700; color: #5DCAA5; line-height: 1; margin-bottom: 4px; }
   .gp-desc { font-size: 12px; font-weight: 300; color: rgba(255,255,255,0.4); line-height: 1.5; }
   .gp-quote { flex: 1; font-family: 'Playfair Display', serif; font-size: 16px; font-style: italic; font-weight: 400; color: rgba(255,255,255,0.5); line-height: 1.6; border-left: 2px solid rgba(93,202,165,0.4); padding-left: 20px; }
+
+  /* ── SCANNING / READABILITY LAYER ── */
+  .scan-label {
+    font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--blue); margin-bottom: 6px; display: block;
+  }
+  .scan-headline {
+    font-family: 'Playfair Display', serif; font-size: clamp(22px,3vw,32px);
+    font-weight: 900; color: var(--ink); line-height: 1.2;
+    letter-spacing: -0.01em; margin-bottom: 12px;
+  }
+  .scan-sub {
+    font-size: 14px; font-weight: 300; color: var(--muted);
+    line-height: 1.8; margin-bottom: 0;
+  }
+  .callout {
+    background: var(--light); border-left: 3px solid var(--blue);
+    border-radius: 0 var(--pill-sm) var(--pill-sm) 0;
+    padding: 14px 18px; margin: 16px 0;
+    font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.65;
+  }
+  .callout.amber { background: var(--amber-light); border-left-color: var(--amber); }
+  .callout.green { background: #E6F4ED; border-left-color: #1A7A4A; color: #1A4A2A; }
+  .highlight { color: var(--blue); font-weight: 600; }
+  .highlight.amber { color: var(--amber); }
+  .stat-inline {
+    font-family: 'Playfair Display', serif; font-size: 1.4em;
+    font-weight: 700; color: var(--blue); line-height: 1;
+  }
+  .proof-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--light); color: var(--blue);
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 3px 9px;
+    border-radius: var(--pill-sm); margin: 2px 2px 2px 0;
+  }
+  .proof-tag.amber { background: var(--amber-light); color: #C05E10; }
+  .proof-tag.green { background: #E6F4ED; color: #1A7A4A; }
+  .section-intro-bold {
+    font-size: 15px; font-weight: 600; color: var(--ink);
+    line-height: 1.6; margin-bottom: 10px;
+  }
+  strong { color: var(--ink); }
+
 </style>
 </head>
 <body>
@@ -128,7 +173,8 @@
   <div>
     <div class="hero-eyebrow">Survivor Equity — Defined Investment, Verified Outcome</div>
     <h1 class="hero-title">Fund the path<br>from rescued<br>to <em>free.</em></h1>
-    <p class="hero-sub">Select a survivor at a specific stage of reintegration. Fund their program through to verified graduation — vocational training, legal support, economic stability. When they graduate, you'll know.</p>
+    <p class="hero-sub">Select a survivor at a specific stage of reintegration. Fund their program through to verified graduation. <strong>When they graduate, you'll know.</strong></p>
+    <div class="callout"><strong>The gap this fills:</strong> Child sponsorship is the stickiest giving product in the sector — because it's personal and has a named relationship. IJM can build this mechanic around survivors without the privacy constraints. A defined investment. A closing moment. No open-ended dependency.</div>
   </div>
   <div class="grad-card">
     <div class="grad-label">Recent graduation</div>
@@ -164,7 +210,7 @@
 </div>
 
 <div class="steps">
-  <div class="step active"><div class="step-num">1</div>Select survivor</div>
+  <div class="step active"><div class="step-num">1</div><strong>Select survivor</strong></div>
   <span style="color:var(--rule);padding:16px 8px">›</span>
   <div class="step"><div class="step-num">2</div>Choose commitment</div>
   <span style="color:var(--rule);padding:16px 8px">›</span>
@@ -173,7 +219,7 @@
 
 <div class="main">
   <div>
-    <div class="section-label">Survivors currently in program — select to fund</div>
+    <div class="section-label">Select a survivor to fund through to graduation</div>
     <div class="survivor-grid">
 
       <div class="survivor-card selected" onclick="selectSurvivor(this,'Alice M.','Nairobi, Kenya · Stage 2: Vocational training','Stage 2','$75/month · 14 months remaining')">
@@ -278,7 +324,7 @@
       <div class="summary-row"><div class="summary-row-label">Outcome verification</div><div class="summary-row-val">Third-party audited</div></div>
     </div>
     <div class="what-happens">
-      <div class="wh-title">What happens when they graduate</div>
+      <div class="wh-title" style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">What happens at graduation — the moment that makes this different</div>
       <div class="wh-item">You receive a final verified outcome report on their program completion</div>
       <div class="wh-item">A third-party auditor confirms economic self-sufficiency</div>
       <div class="wh-item">Your giving relationship closes — with resolution, not just renewal</div>
@@ -290,7 +336,7 @@
 </div>
 
 <div class="grad-proof">
-  <div><div class="gp-label">Graduates to date</div><div class="gp-stat">2,400+</div><div class="gp-desc">Survivors who have completed the full program and achieved verified self-sufficiency</div></div>
+  <div><div class="gp-label">Graduates to date</div><div class="gp-stat" style="font-size:36px"><strong>2,400+</strong></div><div class="gp-desc">Survivors who have completed the full program and achieved verified self-sufficiency</div></div>
   <div><div class="gp-label">Verification tool</div><div class="gp-stat">ASO</div><div class="gp-desc">IJM's externally validated Assessment of Survivor Outcomes — the only peer-reviewed survivor reintegration tool in the sector</div></div>
   <div class="gp-quote">"The closing report we received wasn't just a thank-you. It was a full account of where she was, what she'd built, and what came next for her. That's the moment we decided to fund another." — Justice Bonds donor, 2024</div>
 </div>

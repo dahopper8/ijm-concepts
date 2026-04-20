@@ -224,6 +224,51 @@
 
   /* FOOTNOTE */
   .footnote { margin: 0 60px; padding: 20px 0 48px; font-size: 11px; font-weight: 300; color: var(--muted); line-height: 1.7; border-top: 1px solid var(--ijm-rule); }
+
+  /* ── SCANNING / READABILITY LAYER ── */
+  .scan-label {
+    font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--blue); margin-bottom: 6px; display: block;
+  }
+  .scan-headline {
+    font-family: 'Playfair Display', serif; font-size: clamp(22px,3vw,32px);
+    font-weight: 900; color: var(--ink); line-height: 1.2;
+    letter-spacing: -0.01em; margin-bottom: 12px;
+  }
+  .scan-sub {
+    font-size: 14px; font-weight: 300; color: var(--muted);
+    line-height: 1.8; margin-bottom: 0;
+  }
+  .callout {
+    background: var(--light); border-left: 3px solid var(--blue);
+    border-radius: 0 var(--pill-sm) var(--pill-sm) 0;
+    padding: 14px 18px; margin: 16px 0;
+    font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.65;
+  }
+  .callout.amber { background: var(--amber-light); border-left-color: var(--amber); }
+  .callout.green { background: #E6F4ED; border-left-color: #1A7A4A; color: #1A4A2A; }
+  .highlight { color: var(--blue); font-weight: 600; }
+  .highlight.amber { color: var(--amber); }
+  .stat-inline {
+    font-family: 'Playfair Display', serif; font-size: 1.4em;
+    font-weight: 700; color: var(--blue); line-height: 1;
+  }
+  .proof-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--light); color: var(--blue);
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 3px 9px;
+    border-radius: var(--pill-sm); margin: 2px 2px 2px 0;
+  }
+  .proof-tag.amber { background: var(--amber-light); color: #C05E10; }
+  .proof-tag.green { background: #E6F4ED; color: #1A7A4A; }
+  .section-intro-bold {
+    font-size: 15px; font-weight: 600; color: var(--ink);
+    line-height: 1.6; margin-bottom: 10px;
+  }
+  strong { color: var(--ink); }
+
 </style>
 </head>
 <body>
@@ -231,7 +276,8 @@
 <div class="header">
   <div class="header-eyebrow">International Justice Mission · Program Status</div>
   <h1 class="header-title">Justice <em style="color:#1846D0;font-style:italic">Delivered.</em><br>Justice <em style="color:#F59540;font-style:italic">Underway.</em></h1>
-  <p class="header-sub">IJM's model is designed to work itself out of a program. When a justice system can protect its own people without outside support, IJM closes the chapter and moves on. These are the places that story has been written — and the places where it's still being written.</p>
+  <p class="header-sub">IJM's model is designed to <strong>work itself out of a program.</strong> When a justice system can protect its own people without outside support, IJM closes the chapter. <strong>Hover over any block. Filter by status.</strong> The strip tells the whole story at a glance.</p>
+    <div class="callout" style="background:rgba(255,255,255,0.06);border-left-color:#7EB3FF;margin-top:16px;max-width:580px"><strong style="color:#fff">The problem this solves:</strong> <span style="color:rgba(255,255,255,0.55)">Most donors don't know IJM has closed programs. Child trafficking in Kolkata is down 86%. Trafficking in Cebu dropped 79%. Nine of nine JSS programs reduced violence 50–85%. This makes that proof record visible — without an ask attached.</span></div>
 </div>
 
 <div class="spine-wrap">
@@ -266,10 +312,10 @@
 </div>
 
 <div class="tally-row">
-  <div class="tally-cell"><div class="tally-label">Chapters closed</div><div class="tally-num blue">4</div><div class="tally-sub">Programs concluded after local justice systems proved self-sustaining</div></div>
+  <div class="tally-cell"><div class="tally-label">Chapters closed</div><div class="tally-num blue">4</div><div class="tally-sub"><strong>Chapters closed</strong> — justice systems that now run themselves</div></div>
   <div class="tally-cell"><div class="tally-label">Active programs</div><div class="tally-num" style="color:#E07B2A">6</div><div class="tally-sub">Countries with embedded IJM teams in active transformation work</div></div>
-  <div class="tally-cell"><div class="tally-label">Avg. violence reduction — closed</div><div class="tally-num blue">68%</div><div class="tally-sub">Third-party verified across all concluded programs</div></div>
-  <div class="tally-cell"><div class="tally-label">People protected to date</div><div class="tally-num deep">10M+</div><div class="tally-sub">Since 1997, across all programs worldwide</div></div>
+  <div class="tally-cell"><div class="tally-label">Avg. violence reduction — closed</div><div class="tally-num blue">68%</div><div class="tally-sub"><strong>Third-party verified</strong> — not self-reported</div></div>
+  <div class="tally-cell"><div class="tally-label">People protected to date</div><div class="tally-num deep">10M+</div><div class="tally-sub"><strong>People protected</strong> since 1997</div></div>
 </div>
 
 <div class="filter-bar">
