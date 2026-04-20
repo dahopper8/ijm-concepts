@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IJM — Ideas & Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1846D0; --deep: #0D2B7A; --mid: #2E5FD9;
+    --light: #E8EFFE; --bone: #F4F6FC; --rule: #D8E0F0;
+    --amber: #E07B2A; --amber-light: #FDF0E4;
+    --ink: #0F0F0F; --muted: #5A6070; --white: #fff;
+    --pill: 20px 20px 20px 0; --pill-sm: 12px 12px 12px 0;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bone); font-family: 'DM Sans', sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+  /* NAV */
+  .nav { background: var(--deep); padding: 0 60px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .nav-brand { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+  .nav-brand span { color: #7EB3FF; }
+  .nav-right { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+
+  /* HERO — text only, strip is its own full-width section below */
+  .hero { background: var(--deep); padding: 64px 60px 52px; }
+  .hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 18px; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(36px,5vw,58px); font-weight: 900; color: var(--white); line-height: 1.08; letter-spacing: -0.02em; margin-bottom: 20px; }
+  .hero-title em { font-style: italic; color: #7EB3FF; }
+  .hero-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  .hero-sub { font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.42); line-height: 1.85; }
+  .hero-right { display: flex; flex-direction: column; gap: 16px; }
+  .hero-insight { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-left: 2px solid var(--amber); border-radius: 0 var(--pill-sm) var(--pill-sm) 0; padding: 16px 20px; }
+  .hero-insight-label { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--amber); margin-bottom: 6px; opacity: 0.85; }
+  .hero-insight-text { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.52); line-height: 1.7; }
+  .hero-insight-text strong { font-weight: 500; color: rgba(255,255,255,0.8); }
+  .hero-lofi { font-size: 11px; font-weight: 300; color: rgba(255,255,255,0.25); line-height: 1.65; font-style: italic; }
+
+  /* ── FULL-WIDTH LIVE STRIP ── */
+  .strip-section { background: var(--white); border-bottom: 1px solid var(--rule); }
+  .strip-header { padding: 24px 60px 0; display: flex; align-items: center; justify-content: space-between; }
+  .strip-label { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+  .strip-live { display: flex; align-items: center; gap: 6px; font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); }
+  .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); animation: livepulse 1.6s ease-in-out infinite; }
+  @keyframes livepulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.65)} }
+
+  .live-strip-wrap { padding: 20px 60px 0; }
+  .live-strip { display: flex; gap: 5px; height: 80px; }
+
+  .ls-block {
+    flex: 1; border-radius: 12px 12px 12px 0;
+    position: relative; overflow: hidden;
+    transition: flex 0.38s cubic-bezier(0.22,1,0.36,1), opacity 0.2s;
+    cursor: default; min-width: 0;
+  }
+  .ls-block:hover { flex: 5; }
+  .ls-label {
+    position: absolute; bottom: 8px; left: 10px; right: 6px;
+    font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500;
+    letter-spacing: 0.05em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    transition: font-size 0.25s ease;
+  }
+  .ls-block:hover .ls-label { font-size: 12px; overflow: visible; }
+
+  /* Closed */
+  @keyframes blkfade { from{opacity:0;transform:scaleY(0.4)} to{opacity:1;transform:scaleY(1)} }
+  .ls-closed { background: var(--blue); animation: blkfade 0.5s ease both; }
+  .ls-closed:nth-child(1){animation-delay:0.04s} .ls-closed:nth-child(2){animation-delay:0.09s}
+  .ls-closed:nth-child(3){animation-delay:0.14s} .ls-closed:nth-child(4){animation-delay:0.19s}
+  .ls-closed .ls-label { color: rgba(255,255,255,0.8); }
+  .ls-closed::before { content:'✓'; position:absolute; top:9px; left:10px; font-size:13px; font-weight:700; color:rgba(255,255,255,0.5); }
+
+  /* Active — strong visible pulse + bright scan */
+  @keyframes pulse-bdr {
+    0%,100% { border-color: rgba(224,123,42,0.4); box-shadow: inset 0 0 0 0 rgba(224,123,42,0), 0 0 0 0 rgba(224,123,42,0); }
+    50%      { border-color: rgba(224,123,42,1);   box-shadow: inset 0 0 12px 0 rgba(224,123,42,0.18), 0 0 10px 2px rgba(224,123,42,0.2); }
+  }
+  @keyframes scan {
+    0%   { transform:translateX(-120%); opacity:0; }
+    8%   { opacity:1; }
+    92%  { opacity:1; }
+    100% { transform:translateX(120%); opacity:0; }
+  }
+  .ls-active {
+    border: 2px solid var(--amber);
+    background: rgba(224,123,42,0.14);
+    animation: pulse-bdr 2.2s ease-in-out infinite;
+  }
+  .ls-active:nth-child(5){animation-delay:0.00s} .ls-active:nth-child(6){animation-delay:0.28s}
+  .ls-active:nth-child(7){animation-delay:0.56s} .ls-active:nth-child(8){animation-delay:0.84s}
+  .ls-active:nth-child(9){animation-delay:1.12s} .ls-active:nth-child(10){animation-delay:1.40s}
+  .ls-active::after {
+    content:''; position:absolute; top:0; left:0; width:50%; height:100%;
+    background: linear-gradient(90deg, transparent, rgba(255,190,80,0.45), transparent);
+    animation: scan 2.6s ease-in-out infinite;
+    border-radius: inherit;
+  }
+  .ls-active:nth-child(5)::after{animation-delay:0.00s} .ls-active:nth-child(6)::after{animation-delay:0.40s}
+  .ls-active:nth-child(7)::after{animation-delay:0.80s} .ls-active:nth-child(8)::after{animation-delay:1.20s}
+  .ls-active:nth-child(9)::after{animation-delay:1.60s} .ls-active:nth-child(10)::after{animation-delay:2.00s}
+  .ls-active .ls-label { color: rgba(245,149,64,0.9); }
+
+  /* Ghost */
+  @keyframes ghost { 0%,100%{opacity:0.09} 50%{opacity:0.2} }
+  .ls-ghost { border: 1.5px dashed rgba(0,0,0,0.12); animation: ghost 3.5s ease-in-out infinite; }
+  .ls-ghost:nth-child(11){animation-delay:0.2s} .ls-ghost:nth-child(12){animation-delay:1.1s}
+  .ls-ghost .ls-label { color: rgba(0,0,0,0.22); }
+
+  /* Terminus */
+  @keyframes breathe { 0%,100%{opacity:0.55} 50%{opacity:1} }
+  .ls-terminus {
+    flex: 2; min-width: 120px; border: none; background: transparent;
+    border-left: 1px solid rgba(0,0,0,0.08); border-radius: 0; overflow: visible;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 0 0 18px;
+  }
+  .ls-terminus:hover { flex: 2; }
+  .terminus-words {
+    font-family: 'Playfair Display', serif; font-size: 16px; font-style: italic;
+    color: var(--muted); animation: breathe 4s ease-in-out infinite; line-height: 1.35;
+  }
+
+  /* Strip legend */
+  .strip-legend { display: flex; gap: 28px; padding: 16px 60px 22px; }
+  .sl-item { display: flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 500; color: var(--muted); }
+  .sl-pip { width: 12px; height: 12px; border-radius: 4px 4px 4px 0; flex-shrink: 0; }
+  .sl-pip.closed { background: var(--blue); }
+  .sl-pip.active { border: 2px solid var(--amber); background: rgba(224,123,42,0.12); }
+  .sl-pip.ghost { border: 1.5px dashed rgba(0,0,0,0.2); }
+
+  /* SECTIONS */
+  .section { padding: 52px 60px 0; }
+  .section:last-of-type { padding-bottom: 80px; }
+  .section-label { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; padding-bottom: 14px; border-bottom: 0.5px solid var(--rule); display: flex; align-items: center; justify-content: space-between; }
+  .section-label-tag { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; padding: 3px 9px; border-radius: var(--pill-sm); }
+  .tag-featured { background: var(--light); color: var(--blue); }
+  .tag-product { background: var(--amber-light); color: #C05E10; }
+  .tag-horizon { background: #E6F4ED; color: #1A7A4A; }
+  .tag-digital { background: #EEF0FF; color: #534AB7; }
+
+  /* SECTION INTRO — for unified mission comms block */
+  .section-intro { margin-bottom: 28px; }
+  .section-intro-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--ink); line-height: 1.3; margin-bottom: 10px; }
+  .section-intro-body { font-size: 14px; font-weight: 300; color: var(--muted); line-height: 1.75; max-width: 680px; margin-bottom: 12px; }
+  .section-intro-case { font-size: 12px; font-weight: 500; color: var(--blue); background: var(--light); border-radius: var(--pill-sm); padding: 7px 12px; display: inline-block; }
+
+  /* CARDS */
+  .cards { display: grid; gap: 14px; }
+  .cards-1 { grid-template-columns: 1fr; }
+  .cards-2 { grid-template-columns: repeat(2,1fr); }
+  .cards-3 { grid-template-columns: repeat(3,1fr); }
+
+  .card { background: var(--white); border: 1px solid var(--rule); border-radius: var(--pill); padding: 0; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; transition: border-color 0.15s, box-shadow 0.15s; overflow: hidden; }
+  .card:hover { border-color: var(--blue); box-shadow: 0 4px 24px rgba(24,70,208,0.08); }
+
+  .card-preview { height: 130px; position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 16px 20px; flex-shrink: 0; }
+  .card-preview.deep { background: var(--deep); }
+  .card-preview.blue { background: var(--blue); }
+  .card-preview.amber { background: var(--amber); }
+  .card-preview.green { background: #1A7A4A; }
+  .card-preview.slate { background: #2C3E50; }
+
+  /* mini strip */
+  .mini-strip { display: flex; gap: 3px; width: 100%; align-items: center; }
+  .mini-block { height: 26px; flex: 1; border-radius: 5px 5px 5px 0; }
+  .mini-block.c { background: #7EB3FF; }
+  .mini-block.a { border: 2px solid var(--amber); background: rgba(224,123,42,0.18); }
+  .mini-block.g { border: 1px dashed rgba(255,255,255,0.2); }
+  .mini-term { font-family: 'Playfair Display', serif; font-size: 9px; font-style: italic; color: rgba(255,255,255,0.5); padding-left: 8px; border-left: 1px solid rgba(255,255,255,0.12); white-space: nowrap; align-self: center; }
+
+  /* mini banner preview */
+  .mini-leaderboard { height: 24px; background: rgba(255,255,255,0.06); border-radius: 5px 5px 5px 0; display: flex; align-items: center; gap: 3px; padding: 0 8px; margin-bottom: 5px; }
+  .mlb-block { height: 11px; flex: 1; border-radius: 2px 2px 2px 0; }
+  .mlb-cta { font-size: 7px; font-weight: 600; background: var(--blue); color: #fff; padding: 2px 6px; border-radius: 2px 2px 2px 0; white-space: nowrap; margin-left: 4px; }
+  .mini-socials { display: flex; gap: 5px; }
+  .mini-sq { width: 54px; height: 54px; background: rgba(255,255,255,0.05); border-radius: 6px 6px 6px 0; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; padding: 5px; }
+  .mini-sq-text { font-family: 'Playfair Display', serif; font-size: 7px; font-weight: 700; line-height: 1.2; }
+  .mini-sq-bar { height: 3px; width: 100%; border-radius: 1px; margin-top: 3px; display: flex; gap: 1px; }
+  .mini-story { width: 30px; height: 54px; background: rgba(255,255,255,0.05); border-radius: 5px 5px 5px 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 4px; }
+  .mini-site-hero { height: 38px; background: rgba(255,255,255,0.06); border-radius: 5px 5px 5px 0; display: flex; align-items: center; padding: 0 8px; margin-bottom: 5px; }
+  .mini-site-hl { font-family: 'Playfair Display', serif; font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.5); }
+  .mini-site-rows { display: flex; gap: 3px; }
+  .mini-site-row { flex: 1; height: 11px; background: rgba(255,255,255,0.05); border-radius: 2px 2px 2px 0; }
+
+  /* mini tiers */
+  .mini-tiers { display: flex; flex-direction: column; gap: 5px; width: 100%; }
+  .mini-tier { background: rgba(255,255,255,0.12); border-radius: var(--pill-sm); padding: 6px 10px; display: flex; justify-content: space-between; }
+  .mini-tier-name { font-size: 9px; font-weight: 500; color: rgba(255,255,255,0.7); }
+  .mini-tier-amt { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 700; color: var(--white); }
+
+  /* mini cohort */
+  .mini-avatar { width: 20px; height: 20px; border-radius: 50% 50% 50% 0; background: rgba(255,255,255,0.2); display: inline-flex; align-items: center; justify-content: center; font-size: 7px; font-weight: 600; color: rgba(255,255,255,0.8); margin-left: -4px; }
+  .mini-avatar:first-child { margin-left: 0; }
+  .mini-prog { height: 3px; background: rgba(255,255,255,0.15); border-radius: 2px; overflow: hidden; margin-top: 5px; }
+  .mini-prog-fill { height: 100%; border-radius: 2px; }
+
+  /* mini survivor */
+  .mini-surv-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .mini-surv-av { width: 22px; height: 22px; border-radius: 50% 50% 50% 0; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.8); flex-shrink: 0; }
+  .mini-surv-track { height: 3px; background: rgba(255,255,255,0.12); border-radius: 2px; overflow: hidden; margin-top: 3px; }
+  .mini-surv-fill { height: 100%; background: #5DCAA5; border-radius: 2px; }
+  .mini-surv-name { font-size: 9px; color: rgba(255,255,255,0.6); }
+
+  /* mini sc */
+  .mini-sc-row { background: rgba(255,255,255,0.08); border-radius: 3px 3px 3px 0; padding: 4px 8px; font-size: 9px; color: rgba(255,255,255,0.55); display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
+  .mini-sc-dot { width: 4px; height: 4px; border-radius: 50%; background: #7EB3FF; flex-shrink: 0; }
+
+  /* mini bar chart */
+  .mini-bar-row { display: flex; align-items: flex-end; gap: 3px; height: 50px; width: 100%; }
+  .mini-bar { border-radius: 3px 3px 3px 0; flex: 1; }
+
+  /* CARD BODY */
+  .card-body { padding: 18px 22px; flex: 1; display: flex; flex-direction: column; }
+  .card-type { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
+  .card-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--ink); line-height: 1.25; margin-bottom: 8px; }
+  .card-desc { font-size: 12px; font-weight: 300; color: var(--muted); line-height: 1.7; flex: 1; margin-bottom: 14px; }
+  .card-footer { display: flex; align-items: center; justify-content: space-between; }
+  .card-cta { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); display: flex; align-items: center; gap: 5px; transition: gap 0.15s; }
+  .card:hover .card-cta { gap: 9px; }
+  .card-tag { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: var(--pill-sm); }
+  .tag-flagship { background: var(--light); color: var(--blue); }
+  .tag-near { background: var(--amber-light); color: #C05E10; }
+
+  footer { background: var(--deep); border-top: 1px solid rgba(255,255,255,0.06); padding: 28px 60px; display: flex; align-items: center; justify-content: space-between; }
+  .footer-left { font-size: 12px; font-weight: 300; color: rgba(255,255,255,0.22); }
+  .footer-right { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: rgba(255,255,255,0.18); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">I<span>J</span>M · Ideas</div>
+  <div class="nav-right">April 2026 · Lo-fi concepts</div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">International Justice Mission · Strategic thinking</div>
+  <h1 class="hero-title">Big hands.<br><em>Bigger voice.</em></h1>
+  <div class="hero-cols">
+    <p class="hero-sub">IJM does extraordinary work. Child trafficking in Kolkata is down 86%, independently verified. Trafficking in Cebu dropped 79%. Nine out of nine Justice System Strengthening Programs have reduced violence by 50–85%. Most people — including most donors — have no idea. These concepts explore what it would look like for the org's voice to match what its hands have accomplished.</p>
+    <div class="hero-right">
+      <div class="hero-insight">
+        <div class="hero-insight-label">The core tension</div>
+        <div class="hero-insight-text">IJM has <strong>the most credible proof record in the human rights sector</strong> — peer-reviewed, third-party audited, longitudinal. That proof infrastructure is almost entirely absent from how IJM communicates, fundraises, and builds donor relationships. Every concept here starts from that gap.</div>
+      </div>
+      <div class="hero-lofi">Everything here is rough and lo-fi — built to spark a conversation, not ship to production.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FULL-WIDTH LIVE STRIP -->
+<div class="strip-section">
+  <div class="strip-header">
+    <div class="strip-label">Every program — at a glance</div>
+    <div class="strip-live"><div class="live-dot"></div>Live concept</div>
+  </div>
+  <div class="live-strip-wrap">
+    <div class="live-strip">
+      <div class="ls-block ls-closed"><div class="ls-label">Cebu</div></div>
+      <div class="ls-block ls-closed"><div class="ls-label">Phnom Penh</div></div>
+      <div class="ls-block ls-closed"><div class="ls-label">Tamil Nadu</div></div>
+      <div class="ls-block ls-closed"><div class="ls-label">Chiang Mai</div></div>
+      <div class="ls-block ls-active"><div class="ls-label">Manila</div></div>
+      <div class="ls-block ls-active"><div class="ls-label">South Asia</div></div>
+      <div class="ls-block ls-active"><div class="ls-label">Nairobi</div></div>
+      <div class="ls-block ls-active"><div class="ls-label">Kampala</div></div>
+      <div class="ls-block ls-active"><div class="ls-label">Guatemala</div></div>
+      <div class="ls-block ls-active"><div class="ls-label">Warsaw</div></div>
+      <div class="ls-block ls-ghost"><div class="ls-label">Bangkok</div></div>
+      <div class="ls-block ls-ghost"><div class="ls-label">Lake Volta</div></div>
+      <div class="ls-block ls-terminus">
+        <div class="terminus-words">Until All<br>Are Free.</div>
+      </div>
+    </div>
+  </div>
+  <div class="strip-legend">
+    <div class="sl-item"><div class="sl-pip closed"></div>Justice Delivered</div>
+    <div class="sl-item"><div class="sl-pip active"></div>Justice Underway</div>
+    <div class="sl-item"><div class="sl-pip ghost"></div>Monitoring</div>
+  </div>
+</div>
+
+<!-- MISSION COMMUNICATION — unified section -->
+<div class="section">
+  <div class="section-label">Mission communication <span class="section-label-tag tag-featured">One idea, many surfaces</span></div>
+  <div class="section-intro">
+    <div class="section-intro-title">Justice Delivered. Justice Underway.</div>
+    <div class="section-intro-body">The strip above is a single visual idea that scales across every surface IJM touches — site pages, email headers, social banners, display ads. The concept is the same everywhere: show what's been won in blue, show what's in motion in amber, dissolve forward to "Until All Are Free." IJM has a proof record most donors don't know exists. This makes it visible, ambient, and shareable — without an ask attached.</div>
+    <div class="section-intro-case">Business case: Most donors don't know IJM has closed programs. The proof record is invisible. This makes it tangible across every channel, with no additional content needed per format.</div>
+  </div>
+  <div class="cards cards-2">
+
+    <a class="card" href="ijm_mission_map_v7.html" target="_blank">
+      <div class="card-preview deep">
+        <div style="width:100%;display:flex;flex-direction:column;gap:8px">
+          <div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:900;color:#fff;line-height:1.1">Justice Delivered. <span style="font-style:italic;color:#F59540">Justice Underway.</span></div>
+          <div class="mini-strip">
+            <div class="mini-block c"></div><div class="mini-block c"></div>
+            <div class="mini-block c"></div><div class="mini-block c"></div>
+            <div class="mini-block a"></div><div class="mini-block a"></div>
+            <div class="mini-block a"></div><div class="mini-block a"></div>
+            <div class="mini-block a"></div><div class="mini-block a"></div>
+            <div class="mini-block g"></div><div class="mini-block g"></div>
+            <div class="mini-term">Until All Are Free.</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-type">Interactive page component</div>
+        <div class="card-title">Mission Status Map</div>
+        <div class="card-desc">Full interactive version — filterable by status, hover-to-expand blocks, clickable cards with field data. Built as a site component or standalone page. Hover over each block above to see the expand behavior.</div>
+        <div class="card-footer"><div class="card-cta">Open →</div><div class="card-tag tag-flagship">Page component</div></div>
+      </div>
+    </a>
+
+    <a class="card" href="ijm_banners_v2.html" target="_blank">
+      <div class="card-preview deep">
+        <div style="width:100%;display:flex;flex-direction:column;gap:7px">
+          <div class="mini-leaderboard">
+            <div class="mlb-block" style="background:#7EB3FF;max-width:32px"></div>
+            <div class="mlb-block" style="background:#7EB3FF;max-width:32px"></div>
+            <div class="mlb-block" style="background:#7EB3FF;max-width:32px"></div>
+            <div class="mlb-block" style="background:#7EB3FF;max-width:32px"></div>
+            <div class="mlb-block" style="border:2px solid var(--amber);background:rgba(224,123,42,0.15)"></div>
+            <div class="mlb-block" style="border:2px solid var(--amber);background:rgba(224,123,42,0.15)"></div>
+            <div class="mlb-block" style="border:2px solid var(--amber);background:rgba(224,123,42,0.15)"></div>
+            <div class="mlb-block" style="border:1px dashed rgba(255,255,255,0.2)"></div>
+            <div class="mlb-block" style="border:1px dashed rgba(255,255,255,0.2)"></div>
+            <div style="flex:1"></div>
+            <div class="mlb-cta">Someone is Waiting →</div>
+          </div>
+          <div class="mini-socials">
+            <div class="mini-sq">
+              <div class="mini-sq-text" style="color:#7EB3FF">Justice<br>Delivered.</div>
+              <div class="mini-sq-bar"><div style="flex:1;height:100%;background:#7EB3FF;border-radius:1px"></div><div style="flex:1;height:100%;background:var(--amber);border-radius:1px"></div><div style="flex:1;height:100%;border:1px dashed rgba(255,255,255,0.2);border-radius:1px"></div></div>
+            </div>
+            <div class="mini-sq">
+              <div class="mini-sq-text" style="color:var(--amber);font-style:italic">Justice<br>Underway.</div>
+              <div class="mini-sq-bar"><div style="flex:1;height:100%;background:#7EB3FF;border-radius:1px"></div><div style="flex:1;height:100%;background:var(--amber);border-radius:1px"></div><div style="flex:1;height:100%;border:1px dashed rgba(255,255,255,0.2);border-radius:1px"></div></div>
+            </div>
+            <div class="mini-story">
+              <div style="font-family:'Playfair Display',serif;font-size:6px;font-style:italic;color:rgba(255,255,255,0.5);line-height:1.2">Until All<br>Are Free.</div>
+            </div>
+            <div style="flex:1;height:54px;background:rgba(255,255,255,0.03);border-radius:5px 5px 5px 0"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-type">Animated banners · 5 formats</div>
+        <div class="card-title">Banner Ads & Social</div>
+        <div class="card-desc">Leaderboard, email header, social square, story/reel, display rectangle — all animated. Active blocks pulse and scan. CTA: "Someone is Waiting." Same visual language, every format.</div>
+        <div class="card-footer"><div class="card-cta">Open →</div><div class="card-tag tag-flagship">Display & social</div></div>
+      </div>
+    </a>
+
+    <a class="card" href="ijm_site_concept_v3.html" target="_blank">
+      <div class="card-preview deep">
+        <div style="width:100%">
+          <div class="mini-site-hero"><div class="mini-site-hl">Nobody should wait for justice.</div></div>
+          <div class="mini-site-rows">
+            <div class="mini-site-row"></div><div class="mini-site-row"></div>
+            <div class="mini-site-row" style="max-width:55%"></div>
+          </div>
+          <div style="display:flex;gap:3px;margin-top:4px">
+            <div style="height:7px;width:40px;background:var(--blue);border-radius:2px 2px 2px 0"></div>
+            <div style="height:7px;flex:1;background:rgba(255,255,255,0.05);border-radius:2px 2px 2px 0"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-type">Full site concept · Lo-fi rough</div>
+        <div class="card-title">Site Redesign Direction</div>
+        <div class="card-desc">A rough site direction — survivor-first copy, IJM brand colors, the mission strip as a page module. Very lo-fi. Meant to show a direction, not a finished design.</div>
+        <div class="card-footer"><div class="card-cta">Open →</div><div class="card-tag" style="background:#EEF0FF;color:#534AB7">Site</div></div>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- NEAR TERM PRODUCTS -->
+<div class="section">
+  <div class="section-label">Near-term giving products <span class="section-label-tag tag-product">GTM via existing relationships — not campaigns</span></div>
+  <div class="cards cards-2">
+
+    <a class="card" href="ijm_community_sponsorship.html" target="_blank">
+      <div class="card-preview deep">
+        <div style="width:100%">
+          <div style="font-family:'DM Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:4px">Latest dispatch · Q1 2025</div>
+          <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:1px">Pampanga District</div>
+          <div style="font-size:9px;color:rgba(255,255,255,0.4);margin-bottom:8px">Cebu, Philippines · Year 22 of 26</div>
+          <div style="display:flex;gap:5px">
+            <div style="background:rgba(255,255,255,0.07);border-radius:5px 5px 5px 0;padding:5px 8px;text-align:center">
+              <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#5DCAA5">84</div>
+              <div style="font-size:7px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.06em">Safety score</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.07);border-radius:5px 5px 5px 0;padding:5px 8px;text-align:center">
+              <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#5DCAA5">2026</div>
+              <div style="font-size:7px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.06em">Graduation</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-type">Giving product · Strongest concept</div>
+        <div class="card-title">Community Sponsorship</div>
+        <div class="card-case" style="font-size:11px;font-weight:500;color:var(--blue);background:var(--light);border-radius:var(--pill-sm);padding:5px 10px;margin-bottom:9px;display:inline-block;line-height:1.5">Business case: Freedom Partners is undifferentiated. This creates stickiness, tiering, and a graduation moment.</div>
+        <div class="card-desc">Sponsor a named community. Quarterly dispatches. A verified safety score. A graduation when IJM withdraws. The stickiness of child sponsorship without the privacy constraints.</div>
+        <div class="card-footer"><div class="card-cta">Open →</div><div class="card-tag tag-near">Near term</div></div>
+      </div>
+    </a>
+
+    <a class="card" href="ijm_cohorts_poc.html" target="_blank">
+      <div class="card-preview amber">
+        <div style="width:100%">
+          <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:2px">Redeemer Brooklyn</div>
+          <div style="font-size:9px;color:rgba(255,255,255,0.65);margin-bottom:7px">Church small group · South Asia</div>
+          <div style="display:flex;margin-bottom:5px">
+            <div class="mini-avatar">JR</div><div class="mini-avatar">KL</div>
+            <div class="mini-avatar">MT</div><div class="mini-avatar">+9</div>
+          </div>
+          <div class="mini-prog"><div class="mini-prog-fill" style="width:68%;background:rgba(255,255,255,0.7)"></div></div>
+          <div style="font-size:9px;color:rgba(255,255,255,0.55);margin-top:4px">$13,600 of $20,000 · Month 8 of 12</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-type">Giving product · Faith networks</div>
+        <div class="card-title">Justice Cohorts</div>
+        <div class="card-case" style="font-size:11px;font-weight:500;color:var(--blue);background:var(--light);border-radius:var(--pill-sm);padding:5px 10px;margin-bottom:9px;display:inline-block;line-height:1.5">Business case: Freedom Sunday raises $5.5M in a single moment with no product behind it. This converts that peak into a 12-month relationship.</div>
+        <div class="card-desc">Churches and campus ministries commit collectively to a named region — dedicated field contact, quarterly dispatches, year-end impact report. GTM runs through existing church relationships, not traffic.</div>
+        <div class="card-footer"><div class="card-cta">Open →</div><div class="card-tag tag-near">Near term</div></div>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- LONGER HORIZON -->
+<div class="section">
+  <div class="section-label">Longer horizon <span class="section-label-tag tag-horizon">Bigger swings</span></div>
+  <div class="cards cards-2">
+
+    <a class="card" href="ijm_survivor_equity.html" target="_blank">
+      <div class="card-preview green">
+        <div style="width:100%">
+          <div class="mini-surv-row"><div class="mini-surv-av">A</div><div style="flex:1"><div class="mini-surv-name">Alice M. · Nairobi</div><div class="mini-surv-track"><div class="mini-surv-fill" style="width:65%"></div></div></div></div>
+          <div class="mini-surv-row"><div class="mini-surv-av">R</div><div style="flex:1"><div class="mini-surv-name">Ravi K. family · Tamil Nadu</div><div class="mini-surv-track"><div class="mini-surv-fill" style="width:28%"></div></div></div></div>
+          <div class="mini-surv-row"><div class="mini-surv-av">M</div><div style="flex:1"><div class="mini-surv-name">Maria T. · Manila · Final stretch</div><div class="mini-surv-track"><div class="mini-surv-fill" style="width:92%"></div></div></div></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-type">Giving product · Individual impact</div>
+        <div class="card-title">Survivor Equity</div>
+        <div class="card-case" style="font-size:11px;font-weight:500;color:var(--blue);background:var(--light);border-radius:var(--pill-sm);padding:5px 10px;margin-bottom:9px;display:inline-block;line-height:1.5">Business case: Child sponsorship is the stickiest giving product in the sector. This is IJM's version — defined timeline, verified graduation, no privacy risk.</div>
+        <div class="card-desc">Fund a named survivor's reintegration to verified graduation. A defined investment with a closing moment. The emotional mechanic of sponsorship built on IJM's Assessment of Survivor Outcomes tool.</div>
+        <div class="card-footer"><div class="card-cta">Open →</div><div class="card-tag tag-horizon">Longer horizon</div></div>
+      </div>
+    </a>
+
+    <a class="card" href="ijm_supply_chain.html" target="_blank">
+      <div class="card-preview slate">
+        <div style="width:100%">
+          <div class="mini-sc-row"><div class="mini-sc-dot"></div>EU CS3D enforcement · 2026</div>
+          <div class="mini-sc-row"><div class="mini-sc-dot"></div>UFLPA supply chain scrutiny</div>
+          <div class="mini-sc-row"><div class="mini-sc-dot"></div>ISSB S2 investor disclosure</div>
+          <div style="margin-top:6px;background:var(--blue);border-radius:5px 5px 5px 0;padding:4px 10px;font-size:8px;font-weight:600;color:#fff;letter-spacing:0.06em;text-transform:uppercase;display:inline-block">Verified IJM partnership</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-type">B2B product · Corporate ESG</div>
+        <div class="card-title">Supply Chain Justice</div>
+        <div class="card-case" style="font-size:11px;font-weight:500;color:var(--blue);background:var(--light);border-radius:var(--pill-sm);padding:5px 10px;margin-bottom:9px;display:inline-block;line-height:1.5">Business case: EU CS3D forces verified human rights due diligence for large companies in 2026. IJM has infrastructure no other org can match.</div>
+        <div class="card-desc">Corporate partnership for ESG teams — verified supply chain due diligence, on-the-ground remediation, independently audited reports. B2B sales motion through CSOs and General Counsels.</div>
+        <div class="card-footer"><div class="card-cta">Open →</div><div class="card-tag tag-horizon">Longer horizon</div></div>
+      </div>
+    </a>
+
+
+
+  </div>
+</div>
+
+<footer>
+  <div class="footer-left">International Justice Mission · Lo-fi concepts · April 2026 · Confidential</div>
+  <div class="footer-right">Concept by DH</div>
+</footer>
+
+</body>
+</html>
