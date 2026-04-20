@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IJM — Sponsor a Community</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1846D0; --deep: #0D2B7A; --mid: #2E5FD9;
+    --light: #E8EFFE; --bone: #F4F6FC; --rule: #D8E0F0;
+    --amber: #E07B2A; --amber-light: #FDF0E4;
+    --green: #1A7A4A; --green-light: #E6F4ED;
+    --ink: #0F0F0F; --muted: #5A6070; --white: #fff;
+    --pill: 20px 20px 20px 0; --pill-sm: 12px 12px 12px 0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bone); font-family: 'DM Sans', sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+  /* NAV */
+  .nav { background: var(--deep); padding: 0 48px; display: flex; align-items: center; justify-content: space-between; height: 58px; }
+  .nav-brand { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+  .nav-brand span { color: #7EB3FF; }
+  .nav-back { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.4); text-decoration: none; }
+  .nav-back:hover { color: var(--white); }
+
+  /* HERO */
+  .hero { background: var(--deep); padding: 60px 48px 52px; display: grid; grid-template-columns: 1fr 380px; gap: 60px; align-items: end; }
+  .hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+  .hero-eyebrow::before { content: ''; width: 24px; height: 1px; background: #7EB3FF; display: block; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(32px,4vw,54px); font-weight: 900; color: var(--white); line-height: 1.08; letter-spacing: -0.02em; margin-bottom: 16px; }
+  .hero-title em { font-style: italic; color: #7EB3FF; }
+  .hero-sub { font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.42); line-height: 1.8; max-width: 460px; margin-bottom: 32px; }
+  .hero-distinction { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--pill); padding: 18px 22px; max-width: 460px; }
+  .hero-distinction-text { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.55); line-height: 1.7; }
+  .hero-distinction-text strong { font-weight: 500; color: rgba(255,255,255,0.85); }
+
+  /* DISPATCH CARD — floats from hero */
+  .dispatch-card { background: var(--white); border-radius: var(--pill) var(--pill) 0 0; padding: 28px; }
+  .dispatch-label { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .dispatch-date { font-size: 11px; font-weight: 300; color: var(--muted); margin-bottom: 16px; }
+  .dispatch-community { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+  .dispatch-region { font-size: 12px; font-weight: 300; color: var(--muted); margin-bottom: 18px; }
+  .dispatch-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+  .dispatch-metric { background: var(--bone); border-radius: var(--pill-sm); padding: 12px 14px; }
+  .dispatch-metric-label { font-family: 'DM Mono', monospace; font-size: 8px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .dispatch-metric-val { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--blue); line-height: 1; }
+  .dispatch-metric-val.positive { color: var(--green); }
+  .dispatch-excerpt { font-size: 12px; font-weight: 300; color: #3a3530; line-height: 1.7; border-left: 2px solid var(--blue); padding-left: 12px; font-style: italic; }
+
+  /* STEPS */
+  .steps { background: var(--white); border-bottom: 1px solid var(--rule); padding: 0 48px; display: flex; }
+  .step { display: flex; align-items: center; gap: 8px; padding: 16px 20px 16px 0; margin-right: 20px; font-size: 12px; font-weight: 500; color: var(--muted); border-bottom: 2px solid transparent; }
+  .step.active { color: var(--blue); border-bottom-color: var(--blue); }
+  .step-num { width: 20px; height: 20px; border-radius: 50% 50% 50% 0; border: 1.5px solid var(--rule); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; color: var(--muted); }
+  .step.active .step-num { background: var(--blue); border-color: var(--blue); color: var(--white); }
+
+  /* MAIN */
+  .main { padding: 40px 48px 80px; display: grid; grid-template-columns: 1fr 320px; gap: 28px; align-items: start; }
+
+  /* COMMUNITY CARDS */
+  .section-label { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+  .community-grid { display: flex; flex-direction: column; gap: 12px; }
+
+  .community-card { background: var(--white); border: 1.5px solid var(--rule); border-radius: var(--pill); padding: 24px 28px; cursor: pointer; transition: border-color 0.15s; }
+  .community-card:hover { border-color: var(--blue); }
+  .community-card.selected { border-color: var(--blue); border-width: 2px; }
+
+  .cc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+  .cc-flag { width: 36px; height: 36px; border-radius: 50% 50% 50% 0; background: var(--light); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .cc-name { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--ink); line-height: 1.2; margin-bottom: 3px; }
+  .cc-region { font-size: 11px; font-weight: 300; color: var(--muted); }
+  .cc-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .cc-status { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: var(--pill-sm); }
+  .cc-status.active { background: var(--amber-light); color: #C05E10; }
+  .cc-status.advanced { background: var(--light); color: var(--blue); }
+  .cc-select { width: 18px; height: 18px; border-radius: 50% 50% 50% 0; border: 1.5px solid var(--rule); display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .community-card.selected .cc-select { background: var(--blue); border-color: var(--blue); }
+  .community-card.selected .cc-select::after { content: '✓'; font-size: 9px; font-weight: 700; color: var(--white); }
+
+  .cc-focus { font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0.03em; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 0.5px solid var(--rule); }
+
+  /* SAFETY SCORE */
+  .cc-score-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .cc-score-num { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; color: var(--blue); line-height: 1; min-width: 56px; }
+  .cc-score-num.high { color: var(--green); }
+  .cc-score-right { flex: 1; }
+  .cc-score-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .cc-score-track { height: 6px; background: var(--rule); border-radius: 3px 3px 3px 0; overflow: hidden; }
+  .cc-score-fill { height: 100%; border-radius: 3px 3px 3px 0; }
+  .fill-blue { background: var(--blue); }
+  .fill-green { background: var(--green); }
+  .cc-score-trend { font-size: 11px; font-weight: 600; color: var(--green); margin-top: 4px; }
+
+  /* LAST DISPATCH */
+  .cc-dispatch { background: var(--bone); border-radius: var(--pill-sm); padding: 12px 16px; margin-bottom: 16px; }
+  .cc-dispatch-label { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); margin-bottom: 6px; }
+  .cc-dispatch-text { font-size: 12px; font-weight: 300; color: #3a3530; line-height: 1.65; font-style: italic; }
+
+  .cc-footer { display: flex; align-items: center; justify-content: space-between; }
+  .cc-program-year { font-size: 12px; font-weight: 300; color: var(--muted); }
+  .cc-sponsor-count { font-size: 12px; font-weight: 500; color: var(--ink); background: var(--bone); padding: 4px 10px; border-radius: var(--pill-sm); }
+
+  /* SIDEBAR */
+  .sidebar { position: sticky; top: 16px; }
+  .summary-card { background: var(--white); border: 1px solid var(--rule); border-radius: var(--pill); padding: 24px; margin-bottom: 12px; }
+  .summary-title { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+  .summary-community { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--ink); margin-bottom: 3px; min-height: 28px; }
+  .summary-region { font-size: 12px; font-weight: 300; color: var(--muted); margin-bottom: 18px; min-height: 18px; }
+  .summary-divider { height: 0.5px; background: var(--rule); margin: 14px 0; }
+
+  /* TIER SELECTOR */
+  .tier-label { font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px; }
+  .tiers { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+  .tier-opt { border: 1.5px solid var(--rule); border-radius: var(--pill-sm); padding: 12px 14px; cursor: pointer; transition: all 0.15s; }
+  .tier-opt:hover { border-color: var(--blue); }
+  .tier-opt.selected { border-color: var(--blue); background: var(--light); }
+  .tier-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; }
+  .tier-name { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .tier-amount { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--blue); }
+  .tier-perk { font-size: 11px; font-weight: 300; color: var(--muted); line-height: 1.4; }
+
+  /* WHAT YOU GET */
+  .wyg { background: var(--light); border: 1px solid var(--rule); border-radius: var(--pill); padding: 18px 20px; margin-bottom: 12px; }
+  .wyg-title { font-size: 11px; font-weight: 600; color: var(--blue); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .wyg-item { font-size: 12px; font-weight: 300; color: #3a3530; line-height: 1.6; margin-bottom: 7px; display: flex; gap: 8px; }
+  .wyg-item::before { content: '✓'; font-weight: 600; color: var(--blue); flex-shrink: 0; }
+
+  .commit-btn { width: 100%; background: var(--blue); color: var(--white); border: none; border-radius: var(--pill); padding: 16px 24px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; margin-bottom: 10px; }
+  .commit-btn:hover { background: var(--mid); }
+  .commit-note { font-size: 11px; font-weight: 300; color: var(--muted); text-align: center; line-height: 1.65; }
+
+  /* GRADUATION PROOF STRIP */
+  .grad-strip { background: var(--green); padding: 28px 48px; display: flex; gap: 60px; align-items: center; }
+  .gs-stat-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 4px; }
+  .gs-stat-val { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: var(--white); line-height: 1; }
+  .gs-quote { flex: 1; font-family: 'Playfair Display', serif; font-size: 15px; font-style: italic; color: rgba(255,255,255,0.75); line-height: 1.65; border-left: 2px solid rgba(255,255,255,0.25); padding-left: 20px; }
+
+  /* WHAT HAPPENS AT GRADUATION */
+  .graduation-section { background: var(--deep); padding: 56px 48px; }
+  .grad-label { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 8px; }
+  .grad-title { font-family: 'Playfair Display', serif; font-size: clamp(24px,3vw,38px); font-weight: 700; color: var(--white); line-height: 1.2; margin-bottom: 40px; }
+  .grad-title em { font-style: italic; color: #7EB3FF; }
+  .grad-steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+  .grad-step { }
+  .grad-step-num { font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 900; color: rgba(255,255,255,0.06); line-height: 1; margin-bottom: 10px; }
+  .grad-step-title { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 8px; line-height: 1.3; }
+  .grad-step-body { font-size: 12px; font-weight: 300; color: rgba(255,255,255,0.42); line-height: 1.7; }
+
+  /* COMPARISON */
+  .comparison { background: var(--white); padding: 56px 48px; }
+  .comp-title { font-family: 'Playfair Display', serif; font-size: clamp(22px,3vw,32px); font-weight: 700; color: var(--ink); line-height: 1.2; margin-bottom: 32px; }
+  .comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .comp-card { border: 1px solid var(--rule); border-radius: var(--pill); padding: 24px; }
+  .comp-card.ours { border-color: var(--blue); border-width: 2px; }
+  .comp-card-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+  .comp-card-label.theirs { color: var(--muted); }
+  .comp-card-label.ours { color: var(--blue); }
+  .comp-card-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 16px; }
+  .comp-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 0.5px solid var(--rule); font-size: 12px; }
+  .comp-row:last-child { border-bottom: none; }
+  .comp-row-label { color: var(--muted); }
+  .comp-row-val { font-weight: 500; color: var(--ink); }
+  .comp-row-val.positive { color: var(--green); }
+  .comp-row-val.negative { color: var(--muted); font-weight: 300; }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-brand">I<span>J</span>M · Community Sponsorship</div>
+  <a href="#" class="nav-back">← Back to giving options</a>
+</div>
+
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">Community Sponsorship — A New Kind of Giving Relationship</div>
+    <h1 class="hero-title">Your community.<br>Their <em>justice system.</em><br>Until the work is done.</h1>
+    <p class="hero-sub">Sponsor a named community in active transformation. Receive quarterly field dispatches as the justice system grows stronger. And when IJM withdraws — because the community can protect itself — you'll know. That's the moment your sponsorship was always building toward.</p>
+    <div class="hero-distinction">
+      <div class="hero-distinction-text">This is not a donation. It's a relationship with a place — a named district, a named field team, a named milestone. <strong>When IJM leaves because the work is done, your community graduates.</strong> That ending is the point.</div>
+    </div>
+  </div>
+
+  <div class="dispatch-card">
+    <div class="dispatch-label">Latest field dispatch</div>
+    <div class="dispatch-date">Q1 2025 · Sponsor update</div>
+    <div class="dispatch-community">Pampanga District</div>
+    <div class="dispatch-region">Cebu, Philippines · Year 22</div>
+    <div class="dispatch-metrics">
+      <div class="dispatch-metric">
+        <div class="dispatch-metric-label">Safety score</div>
+        <div class="dispatch-metric-val positive">84</div>
+      </div>
+      <div class="dispatch-metric">
+        <div class="dispatch-metric-label">vs. last quarter</div>
+        <div class="dispatch-metric-val positive">+6 ↑</div>
+      </div>
+      <div class="dispatch-metric">
+        <div class="dispatch-metric-label">Convictions this quarter</div>
+        <div class="dispatch-metric-val">12</div>
+      </div>
+      <div class="dispatch-metric">
+        <div class="dispatch-metric-label">Est. graduation</div>
+        <div class="dispatch-metric-val">2026</div>
+      </div>
+    </div>
+    <div class="dispatch-excerpt">"The prosecutor's office has now handled three consecutive quarters without IJM case support. Local capacity is proving durable. Graduation review scheduled for Q3 2025."</div>
+  </div>
+</div>
+
+<div class="steps">
+  <div class="step active"><div class="step-num">1</div>Select community</div>
+  <span style="color:var(--rule);padding:16px 8px">›</span>
+  <div class="step"><div class="step-num">2</div>Choose tier</div>
+  <span style="color:var(--rule);padding:16px 8px">›</span>
+  <div class="step"><div class="step-num">3</div>Meet your field team</div>
+</div>
+
+<div class="main">
+  <div>
+    <div class="section-label">Communities available for sponsorship</div>
+    <div class="community-grid">
+
+      <div class="community-card selected" onclick="selectCommunity(this,'Pampanga District','Cebu, Philippines · Child sex trafficking','84','fill-green','high','+6 this quarter','72%','22 of est. 26')">
+        <div class="cc-top">
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div class="cc-flag">🇵🇭</div>
+            <div>
+              <div class="cc-name">Pampanga District</div>
+              <div class="cc-region">Cebu, Philippines</div>
+            </div>
+          </div>
+          <div class="cc-right">
+            <div class="cc-status advanced">Advanced program</div>
+            <div class="cc-select"></div>
+          </div>
+        </div>
+        <div class="cc-focus">Child sex trafficking · Prosecution capacity building</div>
+        <div class="cc-score-row">
+          <div class="cc-score-num high">84</div>
+          <div class="cc-score-right">
+            <div class="cc-score-label">Community safety score</div>
+            <div class="cc-score-track"><div class="cc-score-fill fill-green" style="width:84%"></div></div>
+            <div class="cc-score-trend">+6 this quarter · Est. graduation 2026</div>
+          </div>
+        </div>
+        <div class="cc-dispatch">
+          <div class="cc-dispatch-label">Latest dispatch · Q1 2025</div>
+          <div class="cc-dispatch-text">"The prosecutor's office has now handled three consecutive quarters without IJM case support. Local capacity is proving durable."</div>
+        </div>
+        <div class="cc-footer">
+          <div class="cc-program-year">Program year 22 of est. 26</div>
+          <div class="cc-sponsor-count">34 sponsors</div>
+        </div>
+      </div>
+
+      <div class="community-card" onclick="selectCommunity(this,'Dhaka North District','Bangladesh · Conflict-driven trafficking','41','fill-blue','','+4 this quarter','38%','3 of est. 14')">
+        <div class="cc-top">
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div class="cc-flag">🇧🇩</div>
+            <div>
+              <div class="cc-name">Dhaka North District</div>
+              <div class="cc-region">Bangladesh</div>
+            </div>
+          </div>
+          <div class="cc-right">
+            <div class="cc-status active">Early program</div>
+            <div class="cc-select"></div>
+          </div>
+        </div>
+        <div class="cc-focus">Conflict-driven trafficking · Law enforcement training</div>
+        <div class="cc-score-row">
+          <div class="cc-score-num">41</div>
+          <div class="cc-score-right">
+            <div class="cc-score-label">Community safety score</div>
+            <div class="cc-score-track"><div class="cc-score-fill fill-blue" style="width:41%"></div></div>
+            <div class="cc-score-trend" style="color:var(--blue)">+4 this quarter · Baseline improving</div>
+          </div>
+        </div>
+        <div class="cc-dispatch">
+          <div class="cc-dispatch-label">Latest dispatch · Q1 2025</div>
+          <div class="cc-dispatch-text">"First cohort of 28 police officers completed IJM's evidence-handling protocol training. Three trafficking arrests in the district this quarter — up from zero in 2023."</div>
+        </div>
+        <div class="cc-footer">
+          <div class="cc-program-year">Program year 3 of est. 14</div>
+          <div class="cc-sponsor-count">8 sponsors</div>
+        </div>
+      </div>
+
+      <div class="community-card" onclick="selectCommunity(this,'Kampala Central District','Uganda · Sexual violence','57','fill-blue','','+5 this quarter','54%','11 of est. 18')">
+        <div class="cc-top">
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div class="cc-flag">🇺🇬</div>
+            <div>
+              <div class="cc-name">Kampala Central District</div>
+              <div class="cc-region">Uganda</div>
+            </div>
+          </div>
+          <div class="cc-right">
+            <div class="cc-status active">Mid program</div>
+            <div class="cc-select"></div>
+          </div>
+        </div>
+        <div class="cc-focus">Sexual violence · Police accountability · Survivor reintegration</div>
+        <div class="cc-score-row">
+          <div class="cc-score-num">57</div>
+          <div class="cc-score-right">
+            <div class="cc-score-label">Community safety score</div>
+            <div class="cc-score-track"><div class="cc-score-fill fill-blue" style="width:57%"></div></div>
+            <div class="cc-score-trend" style="color:var(--blue)">+5 this quarter · On trajectory</div>
+          </div>
+        </div>
+        <div class="cc-dispatch">
+          <div class="cc-dispatch-label">Latest dispatch · Q1 2025</div>
+          <div class="cc-dispatch-text">"The Local Justice System network launched in Q4 is now active in seven rural parishes. Community leaders are referring cases independently — without IJM prompting."</div>
+        </div>
+        <div class="cc-footer">
+          <div class="cc-program-year">Program year 11 of est. 18</div>
+          <div class="cc-sponsor-count">21 sponsors</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <div class="summary-card">
+      <div class="summary-title">Your sponsorship</div>
+      <div class="summary-community" id="sumCommunity">Pampanga District</div>
+      <div class="summary-region" id="sumRegion">Cebu, Philippines · Child sex trafficking</div>
+      <div class="summary-divider"></div>
+      <div class="tier-label">Select your tier</div>
+      <div class="tiers">
+        <div class="tier-opt" onclick="selectTier(this)">
+          <div class="tier-top"><div class="tier-name">Community Friend</div><div class="tier-amount">$25/mo</div></div>
+          <div class="tier-perk">Quarterly field dispatch · Annual safety score report</div>
+        </div>
+        <div class="tier-opt selected" onclick="selectTier(this)">
+          <div class="tier-top"><div class="tier-name">Community Sponsor</div><div class="tier-amount">$75/mo</div></div>
+          <div class="tier-perk">All above · Named in quarterly dispatch · Field team introduction</div>
+        </div>
+        <div class="tier-opt" onclick="selectTier(this)">
+          <div class="tier-top"><div class="tier-name">Founding Sponsor</div><div class="tier-amount">$250/mo</div></div>
+          <div class="tier-perk">All above · Annual call with field director · Named at graduation ceremony</div>
+        </div>
+      </div>
+      <button class="commit-btn">Sponsor This Community</button>
+      <div class="commit-note">Monthly giving. Cancel with 30 days notice.<br>You'll be notified when graduation is scheduled.</div>
+    </div>
+    <div class="wyg">
+      <div class="wyg-title">What you receive</div>
+      <div class="wyg-item">Quarterly field dispatches — real updates from the community, written by the field team</div>
+      <div class="wyg-item">Annual community safety score with verified methodology</div>
+      <div class="wyg-item">Notification when graduation review is scheduled</div>
+      <div class="wyg-item">A formal graduation report when IJM withdraws — the moment your sponsorship was building toward</div>
+      <div class="wyg-item">Option to sponsor the next community when yours graduates</div>
+    </div>
+  </div>
+</div>
+
+<div class="grad-strip">
+  <div><div class="gs-stat-label">Graduated communities</div><div class="gs-stat-val">4</div></div>
+  <div><div class="gs-stat-label">Avg. program to graduation</div><div class="gs-stat-val">15 yrs</div></div>
+  <div><div class="gs-stat-label">Avg. violence reduction at graduation</div><div class="gs-stat-val">68%</div></div>
+  <div class="gs-quote">"When Cebu graduated, we didn't feel like we'd lost a cause to support. We felt like we'd won something. Then we asked which community needed us next." — Community Sponsor, 2021</div>
+</div>
+
+<div class="graduation-section">
+  <div class="grad-label">The graduation moment</div>
+  <h2 class="grad-title">Your community doesn't just<br>get better. It <em>graduates.</em></h2>
+  <div class="grad-steps">
+    <div class="grad-step">
+      <div class="grad-step-num">01</div>
+      <div class="grad-step-title">Graduation criteria met</div>
+      <div class="grad-step-body">The community sustains conviction rates, independent enforcement, and verified violence reduction for four consecutive quarters without IJM support.</div>
+    </div>
+    <div class="grad-step">
+      <div class="grad-step-num">02</div>
+      <div class="grad-step-title">Independent audit</div>
+      <div class="grad-step-body">Third-party auditors verify the outcomes. Not IJM's word — an external organization confirms the community can protect itself.</div>
+    </div>
+    <div class="grad-step">
+      <div class="grad-step-num">03</div>
+      <div class="grad-step-title">You're notified</div>
+      <div class="grad-step-body">Sponsors receive a graduation report — the full arc of the program, the verified outcomes, and what the community looks like now.</div>
+    </div>
+    <div class="grad-step">
+      <div class="grad-step-num">04</div>
+      <div class="grad-step-title">The next community</div>
+      <div class="grad-step-body">IJM invites you to sponsor the next community that needs you. The relationship doesn't end — it moves forward.</div>
+    </div>
+  </div>
+</div>
+
+<div class="comparison">
+  <div class="comp-title">Why this is different from<br>what you've given before.</div>
+  <div class="comp-grid">
+    <div class="comp-card">
+      <div class="comp-card-label theirs">Traditional sponsorship</div>
+      <div class="comp-card-title">Ongoing, open-ended, individual</div>
+      <div class="comp-row"><div class="comp-row-label">Relationship with</div><div class="comp-row-val">A named individual</div></div>
+      <div class="comp-row"><div class="comp-row-label">Timeline</div><div class="comp-row-val negative">Open-ended</div></div>
+      <div class="comp-row"><div class="comp-row-label">Outcome verification</div><div class="comp-row-val negative">Self-reported</div></div>
+      <div class="comp-row"><div class="comp-row-label">Closing moment</div><div class="comp-row-val negative">None — relationship lapses</div></div>
+      <div class="comp-row"><div class="comp-row-label">What success looks like</div><div class="comp-row-val negative">Ongoing dependency</div></div>
+    </div>
+    <div class="comp-card ours">
+      <div class="comp-card-label ours">IJM Community Sponsorship</div>
+      <div class="comp-card-title">Defined, verified, systemic</div>
+      <div class="comp-row"><div class="comp-row-label">Relationship with</div><div class="comp-row-val positive">A named community</div></div>
+      <div class="comp-row"><div class="comp-row-label">Timeline</div><div class="comp-row-val positive">Program to verified graduation</div></div>
+      <div class="comp-row"><div class="comp-row-label">Outcome verification</div><div class="comp-row-val positive">Third-party audited</div></div>
+      <div class="comp-row"><div class="comp-row-label">Closing moment</div><div class="comp-row-val positive">Graduation — community is free</div></div>
+      <div class="comp-row"><div class="comp-row-label">What success looks like</div><div class="comp-row-val positive">IJM leaves. Justice stays.</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function selectCommunity(card, name, region, score, fillClass, scoreClass, trend, pct, year) {
+  document.querySelectorAll('.community-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  document.getElementById('sumCommunity').textContent = name;
+  document.getElementById('sumRegion').textContent = region;
+}
+function selectTier(opt) {
+  document.querySelectorAll('.tier-opt').forEach(o => o.classList.remove('selected'));
+  opt.classList.add('selected');
+}
+</script>
+</body>
+</html>

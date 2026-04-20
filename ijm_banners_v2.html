@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IJM — Banner Concepts v2 (Animated)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue: #1846D0; --deep: #0D2B7A; --mid: #2E5FD9;
+    --amber: #E07B2A; --amber-dim: rgba(224,123,42,0.15);
+    --ink: #0F0F0F; --muted: #5A6070; --white: #fff;
+    --pill: 20px 20px 20px 0; --pill-sm: 10px 10px 10px 0;
+  }
+  body { background: #12122a; font-family: 'DM Sans', sans-serif; color: var(--white); padding: 40px; -webkit-font-smoothing: antialiased; }
+
+  .page-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 40px; }
+  .section-head { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.2); margin: 52px 0 20px; display: flex; align-items: center; gap: 16px; }
+  .section-head::after { content: ''; flex: 1; height: 0.5px; background: rgba(255,255,255,0.07); }
+  .size-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.18); margin-top: 10px; text-align: center; }
+  .row { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
+  .col { display: flex; flex-direction: column; gap: 0; }
+
+  /* ─────────────────────────────────────────
+     SHARED ANIMATION KEYFRAMES
+  ───────────────────────────────────────── */
+
+  /* Shimmer sweep — active blocks */
+  @keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  /* Pulse glow on active block border */
+  @keyframes pulse-border {
+    0%, 100% { border-color: rgba(224,123,42,0.5); box-shadow: 0 0 0 0 rgba(224,123,42,0); }
+    50%       { border-color: rgba(224,123,42,1);   box-shadow: 0 0 8px 1px rgba(224,123,42,0.25); }
+  }
+
+  /* Loading bar scan — sweeps left to right across active block */
+  @keyframes loading-scan {
+    0%   { transform: translateX(-100%); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateX(100%); opacity: 0; }
+  }
+
+  /* Slow breathing opacity — terminus text */
+  @keyframes breathe {
+    0%, 100% { opacity: 0.6; }
+    50%       { opacity: 1; }
+  }
+
+  /* Fade-in stagger for closed blocks on load */
+  @keyframes fadein {
+    from { opacity: 0; transform: scaleY(0.6); }
+    to   { opacity: 1; transform: scaleY(1); }
+  }
+
+  /* Ghost pulse — very subtle */
+  @keyframes ghost-pulse {
+    0%, 100% { opacity: 0.07; }
+    50%       { opacity: 0.14; }
+  }
+
+  /* ─────────────────────────────────────────
+     BLOCK STYLES — shared across all banners
+  ───────────────────────────────────────── */
+
+  /* Closed — solid blue, fades in on load */
+  .blk-closed {
+    background: var(--blue);
+    border-radius: 8px 8px 8px 0;
+    animation: fadein 0.4s ease both;
+  }
+  .blk-closed:nth-child(1) { animation-delay: 0.05s; }
+  .blk-closed:nth-child(2) { animation-delay: 0.10s; }
+  .blk-closed:nth-child(3) { animation-delay: 0.15s; }
+  .blk-closed:nth-child(4) { animation-delay: 0.20s; }
+
+  /* Active — amber shimmer + pulsing border + scan line */
+  .blk-active {
+    border: 1.5px solid var(--amber);
+    border-radius: 8px 8px 8px 0;
+    background: var(--amber-dim);
+    position: relative;
+    overflow: hidden;
+    animation: pulse-border 2.4s ease-in-out infinite;
+  }
+  /* Stagger the pulse phase per block */
+  .blk-active:nth-child(5)  { animation-delay: 0.0s; }
+  .blk-active:nth-child(6)  { animation-delay: 0.3s; }
+  .blk-active:nth-child(7)  { animation-delay: 0.6s; }
+  .blk-active:nth-child(8)  { animation-delay: 0.9s; }
+  .blk-active:nth-child(9)  { animation-delay: 1.2s; }
+  .blk-active:nth-child(10) { animation-delay: 1.5s; }
+
+  /* The loading-bar scan inside each active block */
+  .blk-active::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,200,100,0.35), transparent);
+    animation: loading-scan 2.8s ease-in-out infinite;
+    border-radius: inherit;
+  }
+  .blk-active:nth-child(5)::after  { animation-delay: 0.0s; }
+  .blk-active:nth-child(6)::after  { animation-delay: 0.4s; }
+  .blk-active:nth-child(7)::after  { animation-delay: 0.8s; }
+  .blk-active:nth-child(8)::after  { animation-delay: 1.2s; }
+  .blk-active:nth-child(9)::after  { animation-delay: 1.6s; }
+  .blk-active:nth-child(10)::after { animation-delay: 2.0s; }
+
+  /* Ghost — barely visible pulse */
+  .blk-ghost {
+    border: 1px dashed rgba(255,255,255,0.1);
+    border-radius: 8px 8px 8px 0;
+    animation: ghost-pulse 3.5s ease-in-out infinite;
+  }
+  .blk-ghost:nth-child(11) { animation-delay: 0s; }
+  .blk-ghost:nth-child(12) { animation-delay: 0.8s; }
+
+  /* Terminus text */
+  .terminus-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: rgba(232,225,210,0.72);
+    animation: breathe 4s ease-in-out infinite;
+  }
+
+  /* ─────────────────────────────────────────
+     LEADERBOARD 728×90
+  ───────────────────────────────────────── */
+  .banner-728 {
+    width: 728px; height: 90px;
+    background: var(--deep);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 28px 0 24px;
+    border-radius: var(--pill);
+    overflow: hidden;
+  }
+  .b728-left { display: flex; align-items: center; gap: 20px; }
+  .b728-wordmark { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.45); flex-shrink: 0; }
+  .b728-wordmark span { color: #7EB3FF; }
+  .b728-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.1); }
+  .b728-strip { display: flex; gap: 3px; align-items: center; }
+  .b728-strip .blk-closed,
+  .b728-strip .blk-active,
+  .b728-strip .blk-ghost { width: 28px; height: 36px; }
+  .b728-sep { width: 1px; height: 36px; background: rgba(255,255,255,0.07); margin: 0 6px; }
+  .b728-terminus { font-size: 12px; padding-left: 10px; }
+  .b728-right { display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
+  .b728-legend { text-align: right; }
+  .b728-row { font-size: 11px; font-weight: 500; display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
+  .b728-row + .b728-row { margin-top: 3px; }
+  .b728-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .dot-blue { background: var(--blue); }
+  .dot-amber { background: var(--amber); animation: pulse-border 2.4s ease-in-out infinite; border-radius: 50%; }
+  .b728-cta { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; background: var(--blue); color: var(--white); padding: 9px 16px; border-radius: var(--pill-sm); white-space: nowrap; cursor: pointer; transition: background 0.2s; }
+  .b728-cta:hover { background: var(--mid); }
+
+  /* ─────────────────────────────────────────
+     EMAIL HEADER 600×160
+  ───────────────────────────────────────── */
+  .banner-email {
+    width: 600px; height: 160px;
+    background: var(--deep);
+    border-radius: var(--pill);
+    padding: 0 36px;
+    display: flex; align-items: center; gap: 32px; overflow: hidden;
+  }
+  .email-left { flex-shrink: 0; }
+  .email-wordmark { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
+  .email-wordmark span { color: #7EB3FF; }
+  .email-delivered { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 900; color: #7EB3FF; line-height: 1.1; }
+  .email-inprogress { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 900; color: var(--amber); font-style: italic; line-height: 1.1; }
+  .email-strip-wrap { flex: 1; }
+  .email-strip { display: flex; gap: 3px; }
+  .email-strip .blk-closed,
+  .email-strip .blk-active,
+  .email-strip .blk-ghost { flex: 1; height: 40px; }
+  .email-terminus { font-size: 10px; padding-left: 2px; margin-top: 7px; }
+  .email-right { flex-shrink: 0; text-align: right; }
+  .email-stat-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.28); margin-bottom: 3px; }
+  .email-stat-val { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: var(--white); line-height: 1; margin-bottom: 12px; }
+  .email-cta { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; background: var(--blue); color: var(--white); padding: 9px 18px; border-radius: var(--pill-sm); display: inline-block; cursor: pointer; }
+
+  /* ─────────────────────────────────────────
+     SOCIAL SQUARE 1080×1080 → 340px
+  ───────────────────────────────────────── */
+  .banner-sq {
+    width: 340px; height: 340px;
+    background: var(--deep);
+    border-radius: var(--pill);
+    padding: 26px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    overflow: hidden;
+  }
+  .sq-wordmark { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+  .sq-wordmark span { color: #7EB3FF; }
+  .sq-delivered { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; color: #7EB3FF; line-height: 1.1; margin-top: 16px; }
+  .sq-inprogress { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; color: var(--amber); line-height: 1.1; font-style: italic; }
+  .sq-strip { display: flex; gap: 3px; margin-top: 16px; }
+  .sq-strip .blk-closed,
+  .sq-strip .blk-active,
+  .sq-strip .blk-ghost { flex: 1; height: 10px; }
+  .sq-strip .blk-closed { border-radius: 4px 4px 4px 0; }
+  .sq-strip .blk-active { border-radius: 4px 4px 4px 0; }
+  .sq-strip .blk-ghost  { border-radius: 4px 4px 4px 0; }
+  .sq-terminus { font-size: 11px; margin-top: 7px; }
+  .sq-footer { display: flex; align-items: flex-end; justify-content: space-between; }
+  .sq-stat-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.28); margin-bottom: 3px; }
+  .sq-stat-val { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--white); }
+  .sq-cta { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; background: var(--blue); color: var(--white); padding: 8px 14px; border-radius: var(--pill-sm); cursor: pointer; }
+
+  /* ─────────────────────────────────────────
+     STORY 1080×1920 → 200×360
+  ───────────────────────────────────────── */
+  .banner-story {
+    width: 200px; height: 360px;
+    background: var(--deep);
+    border-radius: var(--pill);
+    padding: 20px 18px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    overflow: hidden;
+  }
+  .st-wordmark { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+  .st-wordmark span { color: #7EB3FF; }
+  .st-mid { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 14px 0; }
+  .st-delivered { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: #7EB3FF; line-height: 1.15; }
+  .st-inprogress { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--amber); font-style: italic; line-height: 1.15; }
+  .st-strip { display: flex; gap: 2px; margin-top: 14px; }
+  .st-strip .blk-closed,
+  .st-strip .blk-active,
+  .st-strip .blk-ghost { flex: 1; height: 8px; border-radius: 3px 3px 3px 0; }
+  .st-terminus { font-size: 9px; margin-top: 6px; }
+  .st-footer { }
+  .st-stat-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 2px; }
+  .st-stat-val { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+  .st-cta { width: 100%; background: var(--blue); color: var(--white); font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 8px; border-radius: var(--pill-sm); text-align: center; cursor: pointer; }
+
+  /* ─────────────────────────────────────────
+     RECT 300×250
+  ───────────────────────────────────────── */
+  .banner-rect {
+    width: 300px; height: 250px;
+    background: var(--deep);
+    border-radius: var(--pill);
+    padding: 22px 24px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    overflow: hidden;
+  }
+  .rect-wordmark { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+  .rect-wordmark span { color: #7EB3FF; }
+  .rect-delivered { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: #7EB3FF; line-height: 1.1; margin-top: 10px; }
+  .rect-inprogress { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--amber); line-height: 1.1; font-style: italic; }
+  .rect-strip { display: flex; gap: 2px; margin-top: 12px; }
+  .rect-strip .blk-closed,
+  .rect-strip .blk-active,
+  .rect-strip .blk-ghost { flex: 1; height: 8px; border-radius: 3px 3px 3px 0; }
+  .rect-terminus { font-size: 9px; margin-top: 5px; }
+  .rect-footer { display: flex; align-items: center; justify-content: space-between; }
+  .rect-stat-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.28); margin-bottom: 2px; }
+  .rect-stat-val { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--white); }
+  .rect-cta { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; background: var(--blue); color: var(--white); padding: 8px 14px; border-radius: var(--pill-sm); cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="page-label">IJM · Banner concepts v2 — animated · April 2026</div>
+
+<!-- LEADERBOARD -->
+<div class="section-head">Leaderboard 728×90</div>
+<div class="banner-728">
+  <div class="b728-left">
+    <div class="b728-wordmark">I<span>J</span>M</div>
+    <div class="b728-divider"></div>
+    <div class="b728-strip">
+      <div class="blk-closed"></div>
+      <div class="blk-closed"></div>
+      <div class="blk-closed"></div>
+      <div class="blk-closed"></div>
+      <div class="blk-active"></div>
+      <div class="blk-active"></div>
+      <div class="blk-active"></div>
+      <div class="blk-active"></div>
+      <div class="blk-active"></div>
+      <div class="blk-active"></div>
+      <div class="blk-ghost"></div>
+      <div class="blk-ghost"></div>
+      <div class="b728-sep"></div>
+      <div class="terminus-text b728-terminus">Until All Are Free.</div>
+    </div>
+  </div>
+  <div class="b728-right">
+    <div class="b728-legend">
+      <div class="b728-row" style="color:#7EB3FF"><div class="b728-dot dot-blue"></div>Justice Delivered — 4 programs closed</div>
+      <div class="b728-row" style="color:var(--amber)"><div class="b728-dot dot-amber"></div>Justice Underway — 6 active programs</div>
+    </div>
+    <div class="b728-cta">Someone is Waiting →</div>
+  </div>
+</div>
+<div class="size-label">728 × 90 px · web / newsletter header</div>
+
+<!-- EMAIL -->
+<div class="section-head" style="margin-top:48px">Email header 600×160</div>
+<div class="banner-email">
+  <div class="email-left">
+    <div class="email-wordmark">I<span>J</span>M</div>
+    <div class="email-delivered">Justice Delivered.</div>
+    <div class="email-inprogress">Justice Underway.</div>
+  </div>
+  <div class="email-strip-wrap">
+    <div class="email-strip">
+      <div class="blk-closed"></div>
+      <div class="blk-closed"></div>
+      <div class="blk-closed"></div>
+      <div class="blk-closed"></div>
+      <div class="blk-active"></div>
+      <div class="blk-active"></div>
+      <div class="blk-active"></div>
+      <div class="blk-active"></div>
+      <div class="blk-active"></div>
+      <div class="blk-active"></div>
+      <div class="blk-ghost"></div>
+      <div class="blk-ghost"></div>
+    </div>
+    <div class="terminus-text email-terminus">Until All Are Free.</div>
+  </div>
+  <div class="email-right">
+    <div class="email-stat-label">People protected</div>
+    <div class="email-stat-val">10M+</div>
+    <div class="email-cta">Someone is Waiting</div>
+  </div>
+</div>
+<div class="size-label">600 × 160 px · email</div>
+
+<!-- SOCIAL ROW -->
+<div class="section-head">Social — square · story · rect</div>
+<div class="row">
+
+  <!-- SQUARE -->
+  <div class="col">
+    <div class="banner-sq">
+      <div class="sq-wordmark">I<span>J</span>M · 2025</div>
+      <div>
+        <div class="sq-delivered">Justice<br>Delivered.</div>
+        <div class="sq-inprogress">Justice<br>Underway.</div>
+        <div class="sq-strip">
+          <div class="blk-closed"></div>
+          <div class="blk-closed"></div>
+          <div class="blk-closed"></div>
+          <div class="blk-closed"></div>
+          <div class="blk-active"></div>
+          <div class="blk-active"></div>
+          <div class="blk-active"></div>
+          <div class="blk-active"></div>
+          <div class="blk-active"></div>
+          <div class="blk-active"></div>
+          <div class="blk-ghost"></div>
+          <div class="blk-ghost"></div>
+        </div>
+        <div class="terminus-text sq-terminus">Until All Are Free.</div>
+      </div>
+      <div class="sq-footer">
+        <div><div class="sq-stat-label">People protected</div><div class="sq-stat-val">10M+</div></div>
+        <div class="sq-cta">Someone is Waiting</div>
+      </div>
+    </div>
+    <div class="size-label">1080 × 1080 · Instagram / LinkedIn</div>
+  </div>
+
+  <!-- STORY -->
+  <div class="col">
+    <div class="banner-story">
+      <div class="st-wordmark">I<span>J</span>M</div>
+      <div class="st-mid">
+        <div class="st-delivered">Justice<br>Delivered.</div>
+        <div class="st-inprogress">Justice<br>Underway.</div>
+        <div class="st-strip">
+          <div class="blk-closed"></div>
+          <div class="blk-closed"></div>
+          <div class="blk-closed"></div>
+          <div class="blk-closed"></div>
+          <div class="blk-active"></div>
+          <div class="blk-active"></div>
+          <div class="blk-active"></div>
+          <div class="blk-active"></div>
+          <div class="blk-active"></div>
+          <div class="blk-active"></div>
+          <div class="blk-ghost"></div>
+          <div class="blk-ghost"></div>
+        </div>
+        <div class="terminus-text st-terminus">Until All Are Free.</div>
+      </div>
+      <div class="st-footer">
+        <div class="st-stat-label">People protected</div>
+        <div class="st-stat-val">10M+</div>
+        <div class="st-cta">Someone is Waiting →</div>
+      </div>
+    </div>
+    <div class="size-label">1080 × 1920 · Story / Reel</div>
+  </div>
+
+  <!-- RECT -->
+  <div class="col">
+    <div class="banner-rect">
+      <div class="rect-wordmark">I<span>J</span>M</div>
+      <div>
+        <div class="rect-delivered">Justice Delivered.</div>
+        <div class="rect-inprogress">Justice Underway.</div>
+        <div class="rect-strip">
+          <div class="blk-closed"></div>
+          <div class="blk-closed"></div>
+          <div class="blk-closed"></div>
+          <div class="blk-closed"></div>
+          <div class="blk-active"></div>
+          <div class="blk-active"></div>
+          <div class="blk-active"></div>
+          <div class="blk-active"></div>
+          <div class="blk-active"></div>
+          <div class="blk-active"></div>
+          <div class="blk-ghost"></div>
+          <div class="blk-ghost"></div>
+        </div>
+        <div class="terminus-text rect-terminus">Until All Are Free.</div>
+      </div>
+      <div class="rect-footer">
+        <div><div class="rect-stat-label">Since 1997</div><div class="rect-stat-val">10M+</div></div>
+        <div class="rect-cta">Someone is Waiting</div>
+      </div>
+    </div>
+    <div class="size-label">300 × 250 · display / sidebar</div>
+  </div>
+
+</div>
+
+</body>
+</html>

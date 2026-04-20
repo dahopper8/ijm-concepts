@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IJM — Until All Are Free</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ijm-blue: #1846D0;
+    --ijm-deep: #0D2B7A;
+    --ijm-mid: #2E5FD9;
+    --ijm-light: #E8EFFE;
+    --ijm-rule: #D8E0F0;
+    --amber: #E07B2A;
+    --amber-light: #FDF0E4;
+    --amber-border: #F59540;
+    --ijm-bone: #F4F6FC;
+    --ink: #0F0F0F;
+    --muted: #5A6070;
+    --white: #FFFFFF;
+    --pill: 22px 22px 22px 0;
+    --pill-sm: 14px 14px 14px 0;
+  }
+  body {
+    background: var(--ijm-bone);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* HEADER */
+  .header { background: var(--ijm-deep); padding: 52px 60px 0; }
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4); margin-bottom: 20px;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px,5vw,60px); font-weight: 900;
+    color: var(--white); line-height: 1.06; letter-spacing: -0.02em; margin-bottom: 18px;
+  }
+  .header-title em { font-style: italic; color: #7EB3FF; }
+  .header-sub {
+    font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.45);
+    line-height: 1.75; max-width: 580px; padding-bottom: 48px;
+  }
+
+  /* SPINE */
+  .spine-wrap {
+    background: var(--ijm-deep); padding: 0 60px 52px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .spine-label {
+    font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.25); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .spine-label::after { content: ''; flex: 1; height: 0.5px; background: rgba(255,255,255,0.1); }
+  .spine-strip { display: flex; gap: 4px; align-items: stretch; flex-wrap: wrap; }
+
+  .sblock {
+    height: 72px; flex: 1; min-width: 40px;
+    display: flex; flex-direction: column;
+    justify-content: flex-end; padding: 8px 10px;
+    position: relative; border-radius: var(--pill);
+    transition: flex 0.35s cubic-bezier(0.22,1,0.36,1), min-width 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.15s;
+    cursor: default; overflow: hidden;
+  }
+  .sblock:hover {
+    flex: 4; min-width: 130px; opacity: 1 !important;
+    z-index: 2;
+  }
+  .sblock-city {
+    font-family: 'DM Mono', monospace; font-size: 9px;
+    font-weight: 500; letter-spacing: 0.05em;
+    line-height: 1.3; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+    transition: font-size 0.25s ease;
+  }
+  .sblock:hover .sblock-city {
+    font-size: 11px; overflow: visible;
+  }
+
+  /* IJM blue fill = IJM has left its mark */
+  .sblock.closed { background: var(--ijm-blue); }
+  .sblock.closed .sblock-city { color: rgba(255,255,255,0.8); }
+  .sblock.closed::before {
+    content: '✓'; position: absolute; top: 10px; left: 10px;
+    font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.6);
+  }
+
+  .sblock.active { border: 1.5px solid #F59540; background: rgba(224,123,42,0.12); }
+  .sblock.active .sblock-city { color: rgba(245,149,64,0.85); }
+  .sblock.active::before {
+    content: '●'; position: absolute; top: 9px; left: 10px;
+    font-size: 7px; color: #F59540;
+  }
+
+  .sblock.watching { border: 1.5px solid rgba(255,255,255,0.18); }
+  .sblock.watching .sblock-city { color: rgba(255,255,255,0.25); }
+
+  .sblock.next { border: 1.5px dashed rgba(126,179,255,0.4); }
+  .sblock.next .sblock-city { color: rgba(126,179,255,0.5); }
+  .sblock.next-1 { opacity: 0.85; }
+  .sblock.next-2 { opacity: 0.55; }
+  .sblock.next-3 { opacity: 0.3; }
+
+  .sblock.ghost { border: 1px dashed rgba(255,255,255,0.06); background: transparent; }
+  .sblock.ghost-1 { opacity: 0.22; flex: 0.8; }
+  .sblock.ghost-2 { opacity: 0.12; flex: 0.6; }
+  .sblock.ghost-3 { opacity: 0.06; flex: 0.4; }
+
+  .sblock.terminus {
+    flex: 3; min-width: 160px; border: none; background: transparent;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 0 0 20px; border-left: 1px solid rgba(255,255,255,0.07);
+    border-radius: 0;
+  }
+  .terminus-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(16px,2.2vw,24px); font-weight: 400; font-style: italic;
+    color: rgba(255,255,255,0.28); line-height: 1.35;
+  }
+
+  .spine-legend { display: flex; gap: 24px; margin-top: 18px; flex-wrap: wrap; }
+  .spine-legend-item { display: flex; align-items: center; gap: 8px; }
+  .spine-pip { width: 11px; height: 11px; flex-shrink: 0; border-radius: 3px 3px 3px 0; }
+  .spine-pip.closed { background: var(--ijm-blue); }
+  .spine-pip.active { border: 1.5px solid #F59540; background: rgba(224,123,42,0.12); }
+  .spine-pip.watching { border: 1.5px solid rgba(255,255,255,0.2); }
+  .spine-pip.next { border: 1.5px dashed rgba(126,179,255,0.5); }
+  .spine-legend-label { font-size: 11px; color: rgba(255,255,255,0.28); }
+
+  /* TALLY */
+  .tally-row { display: grid; grid-template-columns: repeat(4,1fr); border-bottom: 1px solid var(--ijm-rule); background: var(--white); }
+  .tally-cell { padding: 28px 40px 24px; border-right: 1px solid var(--ijm-rule); }
+  .tally-cell:last-child { border-right: none; }
+  .tally-label { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .tally-num { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; line-height: 1; letter-spacing: -0.03em; margin-bottom: 6px; }
+  .tally-num.blue { color: var(--ijm-blue); }
+  .tally-num.deep { color: #E07B2A; }
+  .tally-sub { font-size: 12px; font-weight: 300; color: var(--muted); line-height: 1.6; }
+
+  /* FILTER BAR */
+  .filter-bar {
+    background: var(--white); border-bottom: 1px solid var(--ijm-rule);
+    padding: 0 60px; display: flex; align-items: center;
+  }
+  .filter-btn {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 10px 18px; border: none; background: none; cursor: pointer;
+    color: var(--muted); border-bottom: 2px solid transparent;
+    transition: all 0.15s; border-radius: var(--pill);
+  }
+  .filter-btn:hover { color: var(--ink); background: var(--ijm-bone); }
+  .filter-btn.active { color: var(--ijm-blue); border-bottom-color: var(--ijm-blue); }
+  .filter-count {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 17px; height: 17px; border-radius: 10px 10px 10px 0;
+    background: var(--ijm-rule); font-size: 9px; font-weight: 600;
+    color: var(--muted); margin-left: 5px;
+  }
+  .filter-btn.active .filter-count { background: var(--ijm-blue); color: var(--white); }
+
+  /* CARDS */
+  .missions-grid {
+    padding: 36px 60px 60px;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 10px;
+  }
+  .mission-card {
+    background: var(--white); border: 1px solid var(--ijm-rule);
+    padding: 22px 26px; transition: border-color 0.15s, box-shadow 0.15s;
+    border-radius: var(--pill);
+  }
+  .mission-card:hover { border-color: var(--ijm-mid); }
+  .mission-card.hidden { display: none; }
+  .mission-card.status-closed  { border-left: 3px solid var(--ijm-blue); }
+  .mission-card.status-active  { border-left: 3px solid #E07B2A; }
+  .mission-card.status-watching { border-left: 3px solid var(--ijm-rule); }
+  .mission-card.status-next    { border-left: 3px dashed var(--ijm-mid); background: var(--ijm-light); }
+
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+  .card-country { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
+  .card-city { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+  .card-badge {
+    flex-shrink: 0; display: flex; align-items: center; gap: 5px;
+    padding: 4px 12px; font-size: 9px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border-radius: var(--pill-sm);
+  }
+  .card-badge.closed   { background: var(--ijm-light); color: var(--ijm-blue); }
+  .card-badge.active   { background: #FDF0E4; color: #C05E10; }
+  .card-badge.watching { background: var(--ijm-bone); color: var(--muted); }
+  .card-badge.next     { background: var(--ijm-light); color: var(--ijm-blue); }
+
+  .card-focus { font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 0.5px solid var(--ijm-rule); }
+  .card-outcome { font-size: 13px; font-weight: 300; color: #3a3530; line-height: 1.7; margin-bottom: 16px; }
+  .card-outcome strong { font-weight: 500; color: var(--ink); }
+  .card-footer { display: flex; align-items: center; justify-content: space-between; }
+  .card-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.06em; }
+  .card-years { font-size: 11px; font-weight: 500; color: var(--muted); background: var(--ijm-bone); padding: 3px 8px; border-radius: var(--pill-sm); }
+
+  /* NEXT FRONTIERS */
+  .next-band { margin: 0 60px 12px; border: 1px dashed rgba(24,70,208,0.25); padding: 36px 48px; background: var(--white); border-radius: var(--pill); }
+  .next-band-label { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ijm-blue); opacity: 0.6; margin-bottom: 8px; }
+  .next-band-headline { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--ink); line-height: 1.3; margin-bottom: 10px; }
+  .next-band-sub { font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.7; max-width: 520px; margin-bottom: 28px; }
+  .next-regions { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+  .next-region { padding: 16px 18px; border: 1px dashed rgba(24,70,208,0.2); background: var(--ijm-bone); border-radius: var(--pill-sm); }
+  .next-region-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 5px; }
+  .next-region-focus { font-size: 11px; font-weight: 500; color: var(--ijm-blue); opacity: 0.65; letter-spacing: 0.04em; margin-bottom: 8px; }
+  .next-region-why { font-size: 12px; font-weight: 300; color: var(--muted); line-height: 1.65; }
+
+  /* PROOF BAND */
+  .proof-band { margin: 0 60px 0; background: var(--ijm-deep); padding: 36px 48px; display: grid; grid-template-columns: repeat(3,1fr); gap: 40px; border-radius: var(--pill) var(--pill) 0 0; }
+  .pb-label { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 8px; }
+  .pb-num { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 900; color: #7EB3FF; line-height: 1; margin-bottom: 6px; }
+  .pb-desc { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.45); line-height: 1.65; }
+
+  /* FOOTNOTE */
+  .footnote { margin: 0 60px; padding: 20px 0 48px; font-size: 11px; font-weight: 300; color: var(--muted); line-height: 1.7; border-top: 1px solid var(--ijm-rule); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">International Justice Mission · Program Status</div>
+  <h1 class="header-title">Justice <em style="color:#1846D0;font-style:italic">Delivered.</em><br>Justice <em style="color:#F59540;font-style:italic">Underway.</em></h1>
+  <p class="header-sub">IJM's model is designed to work itself out of a program. When a justice system can protect its own people without outside support, IJM closes the chapter and moves on. These are the places that story has been written — and the places where it's still being written.</p>
+</div>
+
+<div class="spine-wrap">
+  <div class="spine-label">Every chapter — past, present, and ahead</div>
+  <div class="spine-strip">
+    <div class="sblock closed"><div class="sblock-city">Cebu</div></div>
+    <div class="sblock closed"><div class="sblock-city">Phnom Penh</div></div>
+    <div class="sblock closed"><div class="sblock-city">Tamil Nadu</div></div>
+    <div class="sblock closed"><div class="sblock-city">Chiang Mai</div></div>
+    <div class="sblock active"><div class="sblock-city">Manila</div></div>
+    <div class="sblock active"><div class="sblock-city">South Asia</div></div>
+    <div class="sblock active"><div class="sblock-city">Nairobi</div></div>
+    <div class="sblock active"><div class="sblock-city">Kampala</div></div>
+    <div class="sblock active"><div class="sblock-city">Guatemala</div></div>
+    <div class="sblock active"><div class="sblock-city">Warsaw</div></div>
+    <div class="sblock watching"><div class="sblock-city">Bangkok</div></div>
+    <div class="sblock watching"><div class="sblock-city">Lake Volta</div></div>
+    <div class="sblock next next-1"><div class="sblock-city">Nigeria</div></div>
+    <div class="sblock next next-2"><div class="sblock-city">Myanmar</div></div>
+    <div class="sblock next next-3"><div class="sblock-city">Colombia</div></div>
+    <div class="sblock ghost ghost-1"></div>
+    <div class="sblock ghost ghost-2"></div>
+    <div class="sblock ghost ghost-3"></div>
+    <div class="sblock terminus"><div class="terminus-text">Until all<br>are free.</div></div>
+  </div>
+  <div class="spine-legend">
+    <div class="spine-legend-item"><div class="spine-pip closed"></div><span class="spine-legend-label">Chapter closed — justice system self-sustaining</span></div>
+    <div class="spine-legend-item"><div class="spine-pip active"></div><span class="spine-legend-label">Active — transformation in progress</span></div>
+    <div class="spine-legend-item"><div class="spine-pip watching"></div><span class="spine-legend-label">Monitoring — post-program follow-on</span></div>
+    <div class="spine-legend-item"><div class="spine-pip next"></div><span class="spine-legend-label">Next frontiers — scoping underway</span></div>
+  </div>
+</div>
+
+<div class="tally-row">
+  <div class="tally-cell"><div class="tally-label">Chapters closed</div><div class="tally-num blue">4</div><div class="tally-sub">Programs concluded after local justice systems proved self-sustaining</div></div>
+  <div class="tally-cell"><div class="tally-label">Active programs</div><div class="tally-num" style="color:#E07B2A">6</div><div class="tally-sub">Countries with embedded IJM teams in active transformation work</div></div>
+  <div class="tally-cell"><div class="tally-label">Avg. violence reduction — closed</div><div class="tally-num blue">68%</div><div class="tally-sub">Third-party verified across all concluded programs</div></div>
+  <div class="tally-cell"><div class="tally-label">People protected to date</div><div class="tally-num deep">10M+</div><div class="tally-sub">Since 1997, across all programs worldwide</div></div>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filter('all',this)">All <span class="filter-count">15</span></button>
+  <button class="filter-btn" onclick="filter('closed',this)">Closed <span class="filter-count">4</span></button>
+  <button class="filter-btn" onclick="filter('active',this)">Active <span class="filter-count">6</span></button>
+  <button class="filter-btn" onclick="filter('watching',this)">Monitoring <span class="filter-count">2</span></button>
+  <button class="filter-btn" onclick="filter('next',this)">Next <span class="filter-count">3</span></button>
+</div>
+
+<div class="missions-grid" id="grid">
+  <div class="mission-card status-closed" data-status="closed"><div class="card-top"><div><div class="card-country">Philippines</div><div class="card-city">Cebu</div></div><div class="card-badge closed">✓ Closed</div></div><div class="card-focus">Child sex trafficking</div><div class="card-outcome"><strong>79% reduction</strong> in availability of minors for commercial sex — externally verified over a 4-year window. Local law enforcement now leads prosecution independently.</div><div class="card-footer"><div class="card-date">Closed · 2014</div><div class="card-years">14 yrs</div></div></div>
+
+  <div class="mission-card status-closed" data-status="closed"><div class="card-top"><div><div class="card-country">Cambodia</div><div class="card-city">Phnom Penh</div></div><div class="card-badge closed">✓ Closed</div></div><div class="card-focus">Child sex trafficking</div><div class="card-outcome"><strong>73% reduction</strong> in trafficking prevalence. Cambodian prosecutors trained, conviction rates sustained. IJM presence wound down as local capacity proved durable.</div><div class="card-footer"><div class="card-date">Closed · 2018</div><div class="card-years">16 yrs</div></div></div>
+
+  <div class="mission-card status-closed" data-status="closed"><div class="card-top"><div><div class="card-country">India</div><div class="card-city">Tamil Nadu</div></div><div class="card-badge closed">✓ Closed</div></div><div class="card-focus">Bonded labor</div><div class="card-outcome"><strong>380,000 fewer people</strong> in bonded labor — independently measured. IJM concluded the program in 2021 after local government demonstrated sustained enforcement capacity.</div><div class="card-footer"><div class="card-date">Closed · 2021</div><div class="card-years">11 yrs</div></div></div>
+
+  <div class="mission-card status-closed" data-status="closed"><div class="card-top"><div><div class="card-country">Thailand</div><div class="card-city">Chiang Mai</div></div><div class="card-badge closed">✓ Closed</div></div><div class="card-focus">Sex trafficking · Hill tribe citizenship</div><div class="card-outcome">Hill tribe citizenship cases resolved at scale. Trafficking prosecution embedded in local law enforcement. Program concluded after government demonstrated independent case management.</div><div class="card-footer"><div class="card-date">Closed · 2020</div><div class="card-years">20 yrs</div></div></div>
+
+  <div class="mission-card status-active" data-status="active"><div class="card-top"><div><div class="card-country">Philippines</div><div class="card-city">Manila</div></div><div class="card-badge active">● Active</div></div><div class="card-focus">Online sexual exploitation of children</div><div class="card-outcome">IJM's OSEC program has made the Philippines the global model for prosecuting online child sexual abuse. IJM's Attorney Sam Inocencio named 2024 TIP Report Hero.</div><div class="card-footer"><div class="card-date">Active since 2000</div><div class="card-years">25 yrs</div></div></div>
+
+  <div class="mission-card status-active" data-status="active"><div class="card-top"><div><div class="card-country">India</div><div class="card-city">South Asia — Bonded Labor</div></div><div class="card-badge active">● Active</div></div><div class="card-focus">Forced labor · Bonded labor</div><div class="card-outcome">Nine survivors of bonded labor won local government elections in December 2024 — a historic shift in community power following IJM intervention and restoration work.</div><div class="card-footer"><div class="card-date">Active since 2000</div><div class="card-years">25 yrs</div></div></div>
+
+  <div class="mission-card status-active" data-status="active"><div class="card-top"><div><div class="card-country">Kenya</div><div class="card-city">Nairobi</div></div><div class="card-badge active">● Active</div></div><div class="card-focus">Sexual violence · Police accountability</div><div class="card-outcome">Community-led Local Justice System launched 2024 — bringing justice access to rural areas through IJM-trained local networks operating independently of IJM field staff.</div><div class="card-footer"><div class="card-date">Active since 2004</div><div class="card-years">21 yrs</div></div></div>
+
+  <div class="mission-card status-active" data-status="active"><div class="card-top"><div><div class="card-country">Uganda</div><div class="card-city">Kampala</div></div><div class="card-badge active">● Active</div></div><div class="card-focus">Sexual violence · Land seizure</div><div class="card-outcome">Active case pipeline in sexual violence and property rights. Survivor Alice: "IJM opened my mind to many things. At the time I felt I was alone — they showed me I have strength to survive on my own."</div><div class="card-footer"><div class="card-date">Active since 2004</div><div class="card-years">21 yrs</div></div></div>
+
+  <div class="mission-card status-active" data-status="active"><div class="card-top"><div><div class="card-country">Guatemala</div><div class="card-city">Guatemala City</div></div><div class="card-badge active">● Active</div></div><div class="card-focus">Human trafficking · Sexual violence</div><div class="card-outcome">12 traffickers prosecuted, zero acquittals — the result of 18 months of evidence building alongside Guatemalan prosecutors. Active case pipeline continues.</div><div class="card-footer"><div class="card-date">Active since 2006</div><div class="card-years">19 yrs</div></div></div>
+
+  <div class="mission-card status-active" data-status="active"><div class="card-top"><div><div class="card-country">Poland / Ukraine</div><div class="card-city">Warsaw</div></div><div class="card-badge active">● Active</div></div><div class="card-focus">Human trafficking — conflict displacement</div><div class="card-outcome">First IJM-led law enforcement training in Poland, 2024 — equipping officers to investigate trafficking in the rapidly shifting post-conflict displacement landscape.</div><div class="card-footer"><div class="card-date">Active since 2023</div><div class="card-years">2 yrs</div></div></div>
+
+  <div class="mission-card status-watching" data-status="watching"><div class="card-top"><div><div class="card-country">Thailand</div><div class="card-city">Bangkok</div></div><div class="card-badge watching">○ Monitoring</div></div><div class="card-focus">Labor trafficking · Fishing industry</div><div class="card-outcome">IJM Foundation supporting Thai authorities on labor trafficking in the fishing and seafood supply chain. Post-program monitoring; local enforcement capacity under review.</div><div class="card-footer"><div class="card-date">Monitoring since 2022</div><div class="card-years">7 yrs total</div></div></div>
+
+  <div class="mission-card status-watching" data-status="watching"><div class="card-top"><div><div class="card-country">Ghana</div><div class="card-city">Lake Volta</div></div><div class="card-badge watching">○ Monitoring</div></div><div class="card-focus">Child forced labor · Fishing</div><div class="card-outcome">Children as young as 4 rescued from forced labor in fishing communities since 2014. Post-rescue monitoring of community reintegration and government enforcement ongoing.</div><div class="card-footer"><div class="card-date">Monitoring since 2021</div><div class="card-years">10 yrs total</div></div></div>
+
+  <div class="mission-card status-next" data-status="next"><div class="card-top"><div><div class="card-country">West Africa</div><div class="card-city">Nigeria</div></div><div class="card-badge next">+ Next frontier</div></div><div class="card-focus">Human trafficking · Forced labor</div><div class="card-outcome">Largest source and destination country for trafficking in West Africa. IJM's prosecution-first model has a direct analog with Nigeria's existing justice system infrastructure. Scoping underway.</div><div class="card-footer"><div class="card-date">Scoping · 2025-26</div><div class="card-years">—</div></div></div>
+
+  <div class="mission-card status-next" data-status="next"><div class="card-top"><div><div class="card-country">Southeast Asia</div><div class="card-city">Myanmar / Bangladesh</div></div><div class="card-badge next">+ Next frontier</div></div><div class="card-focus">Forced labor · Conflict-driven trafficking</div><div class="card-outcome">Conflict displacement creating one of the world's fastest-growing trafficking corridors. IJM's existing Southeast Asia infrastructure positions it for rapid deployment.</div><div class="card-footer"><div class="card-date">Scoping · 2025-26</div><div class="card-years">—</div></div></div>
+
+  <div class="mission-card status-next" data-status="next"><div class="card-top"><div><div class="card-country">Latin America</div><div class="card-city">Colombia / Venezuela</div></div><div class="card-badge next">+ Next frontier</div></div><div class="card-focus">Migration-linked trafficking · Sexual exploitation</div><div class="card-outcome">Largest migration-linked trafficking corridor in the Western Hemisphere. IJM's existing presence in Guatemala and Bolivia creates a natural expansion path into this region.</div><div class="card-footer"><div class="card-date">Scoping · 2025-26</div><div class="card-years">—</div></div></div>
+</div>
+
+<div class="next-band">
+  <div class="next-band-label">Next frontiers</div>
+  <div class="next-band-headline">The model is proven.<br>The question is where next.</div>
+  <div class="next-band-sub">Every active program today was once a scoping exercise. The regions below represent where IJM's approach has the clearest path to replication and the greatest unmet need.</div>
+  <div class="next-regions">
+    <div class="next-region"><div class="next-region-name">Nigeria</div><div class="next-region-focus">West Africa trafficking corridor</div><div class="next-region-why">Largest source and destination country for trafficking in West Africa. IJM's prosecution-first model has a direct analog with Nigeria's existing justice system infrastructure.</div></div>
+    <div class="next-region"><div class="next-region-name">Myanmar / Bangladesh</div><div class="next-region-focus">Conflict-driven displacement trafficking</div><div class="next-region-why">Conflict displacement creating one of the world's fastest-growing trafficking corridors. IJM's Southeast Asia infrastructure positions it for rapid deployment.</div></div>
+    <div class="next-region"><div class="next-region-name">Colombia / Venezuela</div><div class="next-region-focus">Migration-linked exploitation</div><div class="next-region-why">Largest migration-linked trafficking corridor in the Western Hemisphere. IJM's presence in Guatemala and Bolivia creates a natural expansion path.</div></div>
+  </div>
+</div>
+
+<div class="proof-band">
+  <div><div class="pb-label">What "closed" means</div><div class="pb-num">3</div><div class="pb-desc">Independent criteria before IJM closes a chapter: sustained conviction rates, trained local prosecutors, and third-party verified reduction in violence. All three, not one or two.</div></div>
+  <div><div class="pb-label">Average program duration</div><div class="pb-num">15 yrs</div><div class="pb-desc">Justice system transformation takes time. IJM commits to the full arc from first intervention to systemic reform to verified closure, not an early exit.</div></div>
+  <div><div class="pb-label">The record no one else holds</div><div class="pb-num">9/9</div><div class="pb-desc">Nine out of nine Justice System Strengthening Projects in the last decade reduced slavery and violence by 50 to 85%. No other human rights organization publishes audited outcome data at this standard.</div></div>
+</div>
+
+<div class="footnote">
+  <strong>Note:</strong> Closed program data drawn from IJM published research, third-party audited financials (FY2024-2025), and the IJM 2024 Year in Review. Next frontier regions are illustrative and based on publicly available trafficking data, not official IJM program announcements. This is a concept document, not an official IJM publication. All program details should be verified against IJM's internal records before external use.
+</div>
+
+<script>
+function filter(status, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mission-card').forEach(card => {
+    card.classList.toggle('hidden', status !== 'all' && card.dataset.status !== status);
+  });
+}
+</script>
+</body>
+</html>

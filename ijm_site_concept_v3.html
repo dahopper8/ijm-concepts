@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IJM — Justice for the World's Poor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ijm-blue: #1846D0;
+    --ijm-deep: #0D2B7A;
+    --ijm-mid: #2E5FD9;
+    --ijm-light: #E8EFFE;
+    --ijm-bone: #F4F6FC;
+    --ijm-rule: #D8E0F0;
+    --ink: #0F0F0F;
+    --white: #FFFFFF;
+    --muted: rgba(255,255,255,0.45);
+    --pill: 28px 28px 28px 0;
+    --pill-sm: 16px 16px 16px 0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--ink); color: var(--white); font-family: 'DM Sans', sans-serif; overflow-x: hidden; cursor: none; }
+
+  .cursor { position: fixed; width: 10px; height: 10px; background: var(--ijm-blue); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); }
+  .cursor-ring { position: fixed; width: 38px; height: 38px; border: 1px solid rgba(24,70,208,0.45); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: all 0.15s ease; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 60px; transition: all 0.4s;
+  }
+  nav.scrolled { background: rgba(13,43,122,0.94); backdrop-filter: blur(14px); padding: 16px 60px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: 0.06em; color: var(--white); text-decoration: none; }
+  .nav-logo span { color: #7EB3FF; }
+  .nav-links { display: flex; gap: 44px; list-style: none; }
+  .nav-links a { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white); background: var(--ijm-blue); padding: 12px 28px; text-decoration: none; transition: background 0.2s; border-radius: var(--pill-sm); }
+  .nav-cta:hover { background: var(--ijm-mid); }
+
+  /* HERO */
+  .hero { position: relative; height: 100vh; min-height: 700px; overflow: hidden; display: flex; align-items: flex-end; padding: 0 60px 80px; }
+  .hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #071640 0%, var(--ijm-deep) 50%, #0a1f5c 100%); }
+  .hero-texture { position: absolute; inset: 0; background-image: radial-gradient(ellipse 60% 80% at 75% 50%, rgba(24,70,208,0.3) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 20% 70%, rgba(13,43,122,0.5) 0%, transparent 60%); }
+  .hero-grid-overlay { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 80px 80px; }
+  .hero-photo-area { position: absolute; right: 0; top: 0; width: 52%; height: 100%; overflow: hidden; }
+  .hero-photo-inner { width: 100%; height: 100%; background: linear-gradient(160deg, var(--ijm-mid) 0%, var(--ijm-deep) 40%, #071640 100%); position: relative; }
+  .hero-figure { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 280px; height: 480px; opacity: 0.12; }
+  .hero-photo-mask { position: absolute; inset: 0; background: linear-gradient(90deg, var(--ijm-deep) 0%, transparent 25%, transparent 75%, var(--ijm-deep) 100%), linear-gradient(0deg, var(--ijm-deep) 0%, transparent 22%); }
+  .hero-stat-block { position: absolute; top: 38%; right: 8%; text-align: right; opacity: 0; animation: fadeUp 1s ease 1.4s forwards; }
+  .hero-stat-num { font-family: 'Syne', sans-serif; font-size: 76px; font-weight: 800; color: #7EB3FF; line-height: 1; letter-spacing: -0.02em; }
+  .hero-stat-label { font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 10px; }
+  .hero-content { position: relative; z-index: 2; max-width: 680px; opacity: 0; animation: fadeUp 1s ease 0.3s forwards; }
+  .hero-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: #7EB3FF; margin-bottom: 24px; display: flex; align-items: center; gap: 16px; }
+  .hero-eyebrow::before { content: ''; display: block; width: 36px; height: 1px; background: #7EB3FF; }
+  .hero-headline { font-family: 'Playfair Display', serif; font-size: clamp(52px,7vw,86px); font-weight: 900; line-height: 1.0; letter-spacing: -0.02em; color: var(--white); margin-bottom: 28px; }
+  .hero-headline em { font-style: italic; color: rgba(245,248,255,0.85); font-weight: 700; }
+  .hero-sub { font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 300; color: rgba(255,255,255,0.55); line-height: 1.75; max-width: 460px; margin-bottom: 48px; letter-spacing: 0.01em; }
+  .hero-actions { display: flex; gap: 20px; align-items: center; }
+  .btn-primary { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--white); background: var(--ijm-blue); padding: 16px 40px; text-decoration: none; transition: all 0.25s; display: inline-block; border-radius: var(--pill); }
+  .btn-primary:hover { background: var(--ijm-mid); transform: translateY(-1px); }
+  .btn-ghost { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); text-decoration: none; display: flex; align-items: center; gap: 10px; transition: color 0.2s; }
+  .btn-ghost:hover { color: var(--white); }
+  .btn-arrow { width: 32px; height: 32px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50% 50% 50% 0; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: all 0.2s; }
+  .btn-ghost:hover .btn-arrow { border-color: rgba(255,255,255,0.55); }
+  .scroll-indicator { position: absolute; bottom: 32px; right: 60px; display: flex; align-items: center; gap: 12px; z-index: 2; opacity: 0; animation: fadeUp 0.8s ease 1.6s forwards; }
+  .scroll-line { width: 1px; height: 48px; background: linear-gradient(0deg, transparent, rgba(255,255,255,0.22)); position: relative; overflow: hidden; }
+  .scroll-line::after { content: ''; position: absolute; top: -48px; left: 0; width: 100%; height: 100%; background: var(--ijm-blue); animation: scrollLine 2s ease-in-out 2s infinite; }
+  .scroll-text { font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.28); writing-mode: vertical-rl; }
+
+  /* TICKER */
+  .ticker { background: var(--ijm-blue); padding: 13px 0; overflow: hidden; white-space: nowrap; }
+  .ticker-track { display: inline-flex; animation: ticker 30s linear infinite; }
+  .ticker-item { font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.9); padding: 0 48px; display: flex; align-items: center; gap: 48px; }
+  .ticker-dot { width: 3px; height: 3px; background: rgba(255,255,255,0.4); border-radius: 50%; }
+
+  /* MISSION */
+  .section-mission { background: var(--white); color: var(--ink); padding: 140px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 120px; align-items: center; }
+  .mission-left { opacity: 0; transform: translateY(40px); transition: all 0.8s ease; }
+  .mission-left.visible { opacity: 1; transform: translateY(0); }
+  .section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ijm-blue); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(24,70,208,0.2); max-width: 60px; }
+  .mission-headline { font-family: 'Playfair Display', serif; font-size: clamp(36px,4vw,54px); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 28px; }
+  .mission-headline em { font-style: italic; color: var(--ijm-blue); }
+  .mission-body { font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 300; line-height: 1.85; color: #3a3530; letter-spacing: 0.01em; }
+  .mission-right { opacity: 0; transform: translateY(40px); transition: all 0.8s ease 0.2s; }
+  .mission-right.visible { opacity: 1; transform: translateY(0); }
+  .stat-stack { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--ijm-rule); }
+  .stat-row { display: flex; align-items: baseline; gap: 24px; padding: 32px 0; border-bottom: 1px solid var(--ijm-rule); }
+  .stat-number { font-family: 'Syne', sans-serif; font-size: 58px; font-weight: 800; color: var(--ijm-blue); line-height: 1; letter-spacing: -0.03em; min-width: 140px; }
+  .stat-desc { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 400; color: #5a5248; line-height: 1.65; }
+  .stat-desc strong { display: block; font-weight: 600; color: var(--ink); font-size: 13px; margin-bottom: 4px; }
+
+  /* STORIES */
+  .section-story { background: var(--ink); padding: 160px 0; overflow: hidden; }
+  .story-header { padding: 0 60px; margin-bottom: 72px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .story-header-left { max-width: 520px; }
+  .story-headline { font-family: 'Playfair Display', serif; font-size: clamp(40px,5vw,60px); font-weight: 900; color: var(--white); line-height: 1.1; letter-spacing: -0.02em; }
+  .story-subhead { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.4); margin-top: 18px; line-height: 1.7; }
+  .story-cta-link { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #7EB3FF; text-decoration: none; display: flex; align-items: center; gap: 12px; transition: gap 0.2s; }
+  .story-cta-link:hover { gap: 20px; }
+  .story-scroll { display: flex; gap: 2px; padding: 0 60px; overflow-x: auto; scrollbar-width: none; }
+  .story-scroll::-webkit-scrollbar { display: none; }
+  .story-card { flex: 0 0 360px; height: 500px; position: relative; overflow: hidden; cursor: none; border-radius: var(--pill); }
+  .story-card-bg { position: absolute; inset: 0; transition: transform 0.6s ease; }
+  .story-card:hover .story-card-bg { transform: scale(1.04); }
+  .story-card-bg-1 { background: linear-gradient(160deg, var(--ijm-mid) 0%, var(--ijm-deep) 50%, #071640 100%); }
+  .story-card-bg-2 { background: linear-gradient(160deg, #0d3a7a 0%, var(--ijm-deep) 50%, #071640 100%); }
+  .story-card-bg-3 { background: linear-gradient(160deg, #0a2866 0%, #071640 50%, #050f2a 100%); }
+  .story-card-gradient { position: absolute; bottom: 0; left: 0; right: 0; height: 70%; background: linear-gradient(0deg, rgba(7,22,64,0.95) 0%, transparent 100%); }
+  .story-card-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 36px; }
+  .story-card-region { font-size: 9px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #7EB3FF; margin-bottom: 10px; }
+  .story-card-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--white); line-height: 1.3; margin-bottom: 14px; }
+  .story-card-body { font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 300; color: rgba(255,255,255,0.48); line-height: 1.7; }
+  .story-card-tag { position: absolute; top: 36px; left: 36px; background: rgba(24,70,208,0.25); border: 1px solid rgba(24,70,208,0.4); color: #7EB3FF; font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; padding: 5px 12px; border-radius: var(--pill-sm); }
+
+  /* PULL QUOTE */
+  .section-pullquote { background: var(--ijm-blue); padding: 120px 60px; position: relative; overflow: hidden; }
+  .pullquote-ornament { position: absolute; font-family: 'Playfair Display', serif; font-size: 400px; font-weight: 900; color: rgba(0,0,0,0.1); line-height: 1; top: -60px; left: 40px; pointer-events: none; user-select: none; }
+  .pullquote-inner { max-width: 860px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+  .pullquote-text { font-family: 'Playfair Display', serif; font-size: clamp(26px,3.8vw,46px); font-weight: 400; font-style: italic; color: var(--white); line-height: 1.5; letter-spacing: -0.01em; margin-bottom: 28px; }
+  .pullquote-attr { font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+
+  /* APPROACH */
+  .section-approach { background: var(--ijm-bone); padding: 160px 60px; }
+  .approach-header { margin-bottom: 72px; display: flex; align-items: flex-end; justify-content: space-between; }
+  .approach-headline { font-family: 'Playfair Display', serif; font-size: clamp(40px,5vw,62px); font-weight: 900; color: var(--ink); line-height: 1.1; letter-spacing: -0.02em; max-width: 460px; }
+  .approach-intro { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300; color: var(--muted); max-width: 300px; line-height: 1.75; text-align: right; color: #5A6070; }
+  .approach-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+  .approach-card { background: var(--white); padding: 48px 40px; border: 1px solid var(--ijm-rule); border-top: 2px solid transparent; opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.3s, box-shadow 0.3s; border-radius: var(--pill); }
+  .approach-card.visible { opacity: 1; transform: translateY(0); }
+  .approach-card:hover { border-top-color: var(--ijm-blue); box-shadow: 0 4px 24px rgba(24,70,208,0.08); }
+  .approach-num { font-family: 'Syne', sans-serif; font-size: 60px; font-weight: 800; color: rgba(24,70,208,0.08); line-height: 1; margin-bottom: 20px; letter-spacing: -0.04em; }
+  .approach-title { font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 12px; line-height: 1.3; }
+  .approach-body { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 300; color: #5A6070; line-height: 1.8; }
+
+  /* CTA */
+  .section-cta { background: var(--white); padding: 160px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .cta-left { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+  .cta-left.visible { opacity: 1; transform: translateY(0); }
+  .cta-headline { font-family: 'Playfair Display', serif; font-size: clamp(38px,5vw,58px); font-weight: 900; color: var(--ink); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 20px; }
+  .cta-headline em { font-style: italic; color: var(--ijm-blue); }
+  .cta-body { font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 300; line-height: 1.85; color: #4a4540; margin-bottom: 44px; }
+  .donate-amounts { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+  .donate-amt { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; border: 1.5px solid var(--ijm-rule); padding: 12px 24px; cursor: pointer; transition: all 0.2s; color: var(--ink); background: transparent; border-radius: var(--pill-sm); }
+  .donate-amt:hover, .donate-amt.active { background: var(--ijm-blue); border-color: var(--ijm-blue); color: var(--white); }
+  .donate-btn { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--white); background: var(--ijm-deep); padding: 18px 48px; border: none; cursor: pointer; width: 100%; transition: background 0.2s; border-radius: var(--pill); }
+  .donate-btn:hover { background: var(--ijm-blue); }
+  .cta-right { opacity: 0; transform: translateX(30px); transition: all 0.8s ease 0.15s; }
+  .cta-right.visible { opacity: 1; transform: translateX(0); }
+  .cta-image-box { height: 460px; background: linear-gradient(160deg, var(--ijm-mid), var(--ijm-deep)); position: relative; overflow: hidden; border-radius: var(--pill); }
+  .cta-image-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(7,22,64,0.85) 0%, transparent 50%); border-radius: var(--pill); }
+  .cta-shape { position: absolute; width: 220px; height: 220px; background: radial-gradient(circle, rgba(24,70,208,0.35), transparent 70%); top: 20%; right: 20%; filter: blur(40px); }
+  .cta-image-text { position: absolute; bottom: 40px; left: 40px; right: 40px; font-family: 'Playfair Display', serif; font-size: 22px; font-style: italic; color: rgba(255,255,255,0.85); line-height: 1.45; border-left: 3px solid #7EB3FF; padding-left: 20px; }
+
+  /* FOOTER */
+  footer { background: var(--ijm-deep); border-top: 1px solid rgba(255,255,255,0.06); padding: 80px 60px 40px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; }
+  .footer-brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 26px; color: var(--white); margin-bottom: 18px; }
+  .footer-brand span { color: #7EB3FF; }
+  .footer-tagline { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 13px; color: rgba(255,255,255,0.3); line-height: 1.7; margin-bottom: 32px; }
+  .footer-col-title { font-size: 9px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 20px; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .footer-links a { font-size: 13px; font-weight: 400; color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-bottom { grid-column: 1/-1; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 30px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-legal { font-size: 11px; color: rgba(255,255,255,0.18); }
+  .footer-socials { display: flex; gap: 12px; }
+  .footer-social { width: 34px; height: 34px; border: 1px solid rgba(255,255,255,0.12); border-radius: 50% 50% 50% 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: rgba(255,255,255,0.35); text-decoration: none; transition: all 0.2s; }
+  .footer-social:hover { border-color: #7EB3FF; color: #7EB3FF; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes scrollLine { 0% { top: -48px; } 100% { top: 100%; } }
+  @keyframes slideUp { to { transform: translateY(0); } }
+  @keyframes expandBar { from { width: 0; } to { width: 100%; } }
+
+  .intro-overlay { position: fixed; inset: 0; background: var(--ijm-deep); z-index: 500; display: flex; align-items: center; justify-content: center; flex-direction: column; transition: opacity 0.8s ease, visibility 0.8s; }
+  .intro-overlay.gone { opacity: 0; visibility: hidden; }
+  .intro-wordmark { font-family: 'Syne', sans-serif; font-size: 80px; font-weight: 800; color: var(--white); letter-spacing: 0.04em; overflow: hidden; height: 100px; display: flex; align-items: center; }
+  .intro-wordmark-inner { transform: translateY(100%); animation: slideUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.3s forwards; }
+  .intro-wordmark span { color: #7EB3FF; }
+  .intro-sub { font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 14px; opacity: 0; animation: fadeUp 0.5s ease 0.9s forwards; }
+  .intro-bar { position: absolute; bottom: 0; left: 0; height: 2px; background: var(--ijm-blue); animation: expandBar 1.4s cubic-bezier(0.22,1,0.36,1) 0.1s forwards; }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<div class="intro-overlay" id="introOverlay">
+  <div class="intro-wordmark"><div class="intro-wordmark-inner">I<span>J</span>M</div></div>
+  <div class="intro-sub">International Justice Mission</div>
+  <div class="intro-bar"></div>
+</div>
+
+<nav id="mainNav">
+  <a href="#" class="nav-logo">I<span>J</span>M</a>
+  <ul class="nav-links">
+    <li><a href="#">Crises We Fight</a></li>
+    <li><a href="#">Countries</a></li>
+    <li><a href="#">Stories</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Research</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Give Now</a>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-texture"></div>
+  <div class="hero-grid-overlay"></div>
+  <div class="hero-photo-area">
+    <div class="hero-photo-inner">
+      <svg class="hero-figure" viewBox="0 0 280 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="140" cy="80" rx="40" ry="45" fill="rgba(255,255,255,0.6)"/>
+        <path d="M60 200 Q80 160 140 155 Q200 160 220 200 L240 380 Q200 420 140 425 Q80 420 40 380 Z" fill="rgba(255,255,255,0.5)"/>
+        <path d="M60 200 L20 320 Q10 340 30 350 L60 340" fill="rgba(255,255,255,0.4)"/>
+        <path d="M220 200 L260 320 Q270 340 250 350 L220 340" fill="rgba(255,255,255,0.4)"/>
+        <path d="M100 420 L80 480" stroke="rgba(255,255,255,0.5)" stroke-width="20" stroke-linecap="round"/>
+        <path d="M180 420 L200 480" stroke="rgba(255,255,255,0.5)" stroke-width="20" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="hero-photo-mask"></div>
+  </div>
+  <div class="hero-stat-block"><div class="hero-stat-num">43M</div><div class="hero-stat-label">People in modern<br>slavery today</div></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Global Human Rights</div>
+    <h1 class="hero-headline">Nobody<br>should wait<br>for <em>justice.</em></h1>
+    <p class="hero-sub">Forty-three million people are trapped in slavery, violence, or exploitation right now. They're waiting for someone to show up. These are their stories.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">Be That Someone</a>
+      <a href="#" class="btn-ghost">Read Their Stories <span class="btn-arrow">→</span></a>
+    </div>
+  </div>
+  <div class="scroll-indicator"><div class="scroll-line"></div><span class="scroll-text">Scroll</span></div>
+</section>
+
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">Human Trafficking <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Forced Labor <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Sexual Violence <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Property Seizure <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Police Brutality <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Child Protection <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Survivor Recovery <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Justice Reform <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Human Trafficking <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Forced Labor <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Sexual Violence <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Property Seizure <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Police Brutality <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Child Protection <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Survivor Recovery <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Justice Reform <span class="ticker-dot"></span></span>
+  </div>
+</div>
+
+<section class="section-mission" id="mission">
+  <div class="mission-left">
+    <div class="section-label">What Changes</div>
+    <h2 class="mission-headline">For them,<br><em>everything.</em></h2>
+    <p class="mission-body">A child leaves a brick kiln. A mother gets her land title back. A survivor walks into a courtroom and watches the person who hurt her get convicted. These aren't outcomes — they're people whose lives turned on a single moment when someone intervened. That intervention is funded by people like you, carried out by officers and lawyers and social workers in 30+ countries, and tracked relentlessly until it sticks.</p>
+  </div>
+  <div class="mission-right">
+    <div class="stat-stack">
+      <div class="stat-row"><div class="stat-number">59K+</div><div class="stat-desc"><strong>People protected last year</strong>Survivors removed from trafficking, slavery, and violence — each one a case that someone fought to close.</div></div>
+      <div class="stat-row"><div class="stat-number">30+</div><div class="stat-desc"><strong>Countries with active cases</strong>Field offices, embedded prosecutors, trained officers — in places where justice has historically meant nothing.</div></div>
+      <div class="stat-row"><div class="stat-number">$1B+</div><div class="stat-desc"><strong>In economic harm stopped</strong>What trafficking costs its victims — and what donors helped prevent from being taken from them.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-story">
+  <div class="story-header">
+    <div class="story-header-left">
+      <div class="section-label" style="color:#7EB3FF">From the Field</div>
+      <h2 class="story-headline">Their names.<br>Their outcomes.</h2>
+      <p class="story-subhead">Every case is a person. Read what happened when someone showed up for them.</p>
+    </div>
+    <a href="#" class="story-cta-link">All Stories →</a>
+  </div>
+  <div class="story-scroll">
+    <div class="story-card"><div class="story-card-bg story-card-bg-1"></div><div class="story-card-gradient"></div><div class="story-card-tag">Philippines</div><div class="story-card-content"><div class="story-card-region">Manila · 2024</div><h3 class="story-card-title">She waited 14 years. Then she won.</h3><p class="story-card-body">Maria-Theresa was a trafficked survivor who became a prosecutor. Her first conviction changed how her entire province handles these cases. This is what justice looks like when it loops back.</p></div></div>
+    <div class="story-card"><div class="story-card-bg story-card-bg-2"></div><div class="story-card-gradient"></div><div class="story-card-tag">India</div><div class="story-card-content"><div class="story-card-region">Tamil Nadu · 2024</div><h3 class="story-card-title">Ravi was eight when his family was taken.</h3><p class="story-card-body">Eleven years in a brick kiln. A single tip from a neighbor. Four hours of coordinated action by a trained officer. His entire family walked free before sundown.</p></div></div>
+    <div class="story-card"><div class="story-card-bg story-card-bg-3"></div><div class="story-card-gradient"></div><div class="story-card-tag">Kenya</div><div class="story-card-content"><div class="story-card-region">Nairobi · 2024</div><h3 class="story-card-title">120 survivors. Now in school.</h3><p class="story-card-body">What started as emergency shelter became a full aftercare campus — because the survivors who arrived there never wanted to leave, and the team refused to make them.</p></div></div>
+    <div class="story-card"><div class="story-card-bg" style="background:linear-gradient(160deg,#0a2060,#071640,#050f30)"></div><div class="story-card-gradient"></div><div class="story-card-tag">Guatemala</div><div class="story-card-content"><div class="story-card-region">Guatemala City · 2024</div><h3 class="story-card-title">Twelve traffickers. Zero walked.</h3><p class="story-card-body">Eighteen months of building evidence the right way — documented, airtight, survivor-centered. Then the prosecutors took it to court, and not one of them left free.</p></div></div>
+  </div>
+</section>
+
+<section class="section-pullquote">
+  <div class="pullquote-ornament">"</div>
+  <div class="pullquote-inner">
+    <p class="pullquote-text">"She had been waiting for someone to come. Most people in her situation wait forever. She didn't — because someone decided that was unacceptable."</p>
+    <div class="pullquote-attr">IJM Field Investigator · Manila, 2024</div>
+  </div>
+</section>
+
+<section class="section-approach" id="approach">
+  <div class="approach-header">
+    <h2 class="approach-headline">Six things that have to happen for someone to actually be free.</h2>
+    <p class="approach-intro">Not rescued. Not temporarily safe. Actually, permanently, legally free — with a rebuilt life and a system that won't let it happen again.</p>
+  </div>
+  <div class="approach-grid">
+    <div class="approach-card"><div class="approach-num">01</div><h3 class="approach-title">Someone has to find them</h3><p class="approach-body">Investigators and trained officers identify victims in places that look like ordinary businesses, farms, and homes. The search doesn't stop until the person is located.</p></div>
+    <div class="approach-card"><div class="approach-num">02</div><h3 class="approach-title">Someone has to get them out</h3><p class="approach-body">Coordinated rescue operations — built around survivor safety, not spectacle — extract victims from trafficking rings, forced labor, and violent households.</p></div>
+    <div class="approach-card"><div class="approach-num">03</div><h3 class="approach-title">Someone has to hold the perpetrator accountable</h3><p class="approach-body">Lawyers build prosecutable cases. Investigators gather evidence that survives cross-examination. Trials happen. Sentences stick. Traffickers learn there are consequences.</p></div>
+    <div class="approach-card"><div class="approach-num">04</div><h3 class="approach-title">Someone has to stay with them</h3><p class="approach-body">Aftercare isn't a phase — it's a long commitment. Social workers, counselors, and economic recovery programs stay engaged until survivors are genuinely self-sufficient.</p></div>
+    <div class="approach-card"><div class="approach-num">05</div><h3 class="approach-title">The system has to be fixed</h3><p class="approach-body">Police training. Legislative reform. Prosecution protocols. The work doesn't scale until the local justice system can sustain it without outside support.</p></div>
+    <div class="approach-card"><div class="approach-num">06</div><h3 class="approach-title">The outcome has to be proven</h3><p class="approach-body">Third-party researchers measure community safety before and after. Because donors deserve proof, and survivors deserve a record that what happened to them wasn't forgotten.</p></div>
+  </div>
+</section>
+
+<section class="section-cta" id="give">
+  <div class="cta-left">
+    <div class="section-label" style="color:var(--ijm-blue)">Give Today</div>
+    <h2 class="cta-headline">Your money goes<br>to <em>court.</em></h2>
+    <p class="cta-body">Charity Navigator gives IJM its highest rating. Every dollar is tracked from your card to a case outcome — because the people funding this work deserve the same accountability the justice system owes its survivors.</p>
+    <div class="donate-amounts">
+      <div class="donate-amt active" onclick="setAmt(this)">$35</div>
+      <div class="donate-amt" onclick="setAmt(this)">$75</div>
+      <div class="donate-amt" onclick="setAmt(this)">$150</div>
+      <div class="donate-amt" onclick="setAmt(this)">$500</div>
+      <div class="donate-amt" onclick="setAmt(this)">Other</div>
+    </div>
+    <button class="donate-btn">Give Monthly — Make It Permanent</button>
+  </div>
+  <div class="cta-right">
+    <div class="cta-image-box">
+      <div class="cta-shape"></div>
+      <div class="cta-image-overlay"></div>
+      <div class="cta-image-text">"She had been waiting for someone to come. We came."</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-brand">I<span>J</span>M</div>
+    <p class="footer-tagline">International Justice Mission protects people in poverty from violence throughout the developing world.</p>
+  </div>
+  <div>
+    <div class="footer-col-title">Crises We Fight</div>
+    <ul class="footer-links"><li><a href="#">Human Trafficking</a></li><li><a href="#">Forced Labor</a></li><li><a href="#">Sexual Violence</a></li><li><a href="#">Property Seizure</a></li><li><a href="#">Child Protection</a></li></ul>
+  </div>
+  <div>
+    <div class="footer-col-title">Organization</div>
+    <ul class="footer-links"><li><a href="#">About IJM</a></li><li><a href="#">Leadership</a></li><li><a href="#">Field Offices</a></li><li><a href="#">Research</a></li><li><a href="#">Press</a></li></ul>
+  </div>
+  <div>
+    <div class="footer-col-title">Get Involved</div>
+    <ul class="footer-links"><li><a href="#">Give Now</a></li><li><a href="#">Give Monthly</a></li><li><a href="#">Careers</a></li><li><a href="#">Volunteer</a></li><li><a href="#">Partner</a></li></ul>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-legal">© 2024 International Justice Mission. All rights reserved. EIN 54-1722707.</span>
+    <div class="footer-socials">
+      <a href="#" class="footer-social">in</a>
+      <a href="#" class="footer-social">tw</a>
+      <a href="#" class="footer-social">ig</a>
+      <a href="#" class="footer-social">yt</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+function animateRing(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;cursorRing.style.left=rx+'px';cursorRing.style.top=ry+'px';requestAnimationFrame(animateRing);}
+animateRing();
+setTimeout(()=>{document.getElementById('introOverlay').classList.add('gone');},2200);
+const nav=document.getElementById('mainNav');
+window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>80);});
+const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.15});
+document.querySelectorAll('.mission-left,.mission-right,.approach-card,.cta-left,.cta-right').forEach(el=>observer.observe(el));
+document.querySelectorAll('.approach-card').forEach((c,i)=>{c.style.transitionDelay=(i*0.08)+'s';});
+function setAmt(el){document.querySelectorAll('.donate-amt').forEach(a=>a.classList.remove('active'));el.classList.add('active');}
+window.addEventListener('scroll',()=>{const sy=window.scrollY;if(sy<window.innerHeight){const pa=document.querySelector('.hero-photo-area');const hc=document.querySelector('.hero-content');if(pa)pa.style.transform=`translateY(${sy*0.25}px)`;if(hc)hc.style.transform=`translateY(${sy*0.1}px)`;}});
+</script>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IJM Supply Chain Justice — Corporate Partnership</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1846D0; --deep: #0D2B7A; --mid: #2E5FD9;
+    --light: #E8EFFE; --bone: #F4F6FC; --rule: #D8E0F0;
+    --amber: #E07B2A; --amber-light: #FDF0E4;
+    --ink: #0F0F0F; --muted: #5A6070; --white: #fff;
+    --pill: 20px 20px 20px 0; --pill-sm: 12px 12px 12px 0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--white); font-family: 'DM Sans', sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+  /* NAV */
+  .nav { background: var(--white); border-bottom: 1px solid var(--rule); padding: 0 60px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .nav-brand { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .nav-brand span { color: var(--blue); }
+  .nav-right { display: flex; align-items: center; gap: 32px; }
+  .nav-link { font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; }
+  .nav-link:hover { color: var(--ink); }
+  .nav-cta { background: var(--blue); color: var(--white); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 22px; border-radius: var(--pill-sm); text-decoration: none; }
+
+  /* HERO */
+  .hero { background: var(--deep); padding: 80px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 18px; display: flex; align-items: center; gap: 14px; }
+  .hero-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--amber); display: block; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(34px,4vw,56px); font-weight: 900; color: var(--white); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 20px; }
+  .hero-title em { font-style: italic; color: #7EB3FF; }
+  .hero-sub { font-size: 15px; font-weight: 300; color: rgba(255,255,255,0.5); line-height: 1.8; margin-bottom: 36px; max-width: 480px; }
+  .hero-actions { display: flex; gap: 16px; align-items: center; }
+  .btn-primary { background: var(--blue); color: var(--white); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 14px 32px; border-radius: var(--pill); text-decoration: none; transition: background 0.2s; }
+  .btn-primary:hover { background: var(--mid); }
+  .btn-ghost { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.5); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+  .btn-ghost:hover { color: var(--white); }
+
+  /* REGULATION ALERT */
+  .reg-card { background: rgba(224,123,42,0.12); border: 1px solid rgba(224,123,42,0.25); border-radius: var(--pill); padding: 20px 24px; }
+  .reg-label { font-size: 10px; font-weight: 600; color: var(--amber); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+  .reg-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+  .reg-body { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.55); line-height: 1.65; margin-bottom: 14px; }
+  .reg-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .reg-chip { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); padding: 4px 10px; border-radius: var(--pill-sm); }
+
+  /* PROOF STRIP */
+  .proof-strip { border-bottom: 1px solid var(--rule); padding: 0 60px; display: flex; background: var(--white); }
+  .proof-item { padding: 24px 40px 22px 0; margin-right: 40px; border-right: 1px solid var(--rule); }
+  .proof-item:last-child { border-right: none; }
+  .proof-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
+  .proof-val { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--blue); line-height: 1; }
+  .proof-sub { font-size: 11px; font-weight: 300; color: var(--muted); margin-top: 3px; }
+
+  /* WHAT WE OFFER */
+  .section { padding: 72px 60px; }
+  .section-label { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(28px,4vw,42px); font-weight: 700; color: var(--ink); line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 16px; }
+  .section-title em { font-style: italic; color: var(--blue); }
+  .section-sub { font-size: 14px; font-weight: 300; color: var(--muted); line-height: 1.75; max-width: 560px; margin-bottom: 48px; }
+
+  .offer-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+  .offer-card { border: 1px solid var(--rule); border-radius: var(--pill); padding: 28px 24px; border-top: 3px solid var(--blue); }
+  .offer-num { font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 900; color: rgba(24,70,208,0.08); line-height: 1; margin-bottom: 14px; }
+  .offer-title { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+  .offer-body { font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.75; }
+
+  /* CASE STUDIES */
+  .cases-section { background: var(--bone); padding: 72px 60px; }
+  .cases-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-top: 40px; }
+  .case-card { background: var(--white); border: 1px solid var(--rule); border-radius: var(--pill); padding: 28px; }
+  .case-industry { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue); margin-bottom: 8px; }
+  .case-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 10px; line-height: 1.3; }
+  .case-body { font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.7; margin-bottom: 18px; }
+  .case-outcomes { display: flex; gap: 20px; }
+  .case-outcome { }
+  .case-outcome-val { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--blue); }
+  .case-outcome-label { font-size: 11px; font-weight: 300; color: var(--muted); margin-top: 2px; }
+
+  /* TIERS */
+  .tiers-section { padding: 72px 60px; }
+  .tier-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 40px; }
+  .tier-card { border: 1px solid var(--rule); border-radius: var(--pill); padding: 32px 28px; }
+  .tier-card.featured { border-color: var(--blue); border-width: 2px; }
+  .tier-badge { font-size: 10px; font-weight: 600; background: var(--light); color: var(--blue); padding: 4px 10px; border-radius: var(--pill-sm); display: inline-block; margin-bottom: 14px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .tier-name { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+  .tier-price { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; color: var(--blue); line-height: 1; margin-bottom: 4px; }
+  .tier-price-sub { font-size: 12px; font-weight: 300; color: var(--muted); margin-bottom: 20px; }
+  .tier-divider { height: 0.5px; background: var(--rule); margin: 16px 0; }
+  .tier-item { font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.6; margin-bottom: 8px; display: flex; gap: 8px; }
+  .tier-item::before { content: '✓'; font-weight: 600; color: var(--blue); flex-shrink: 0; }
+  .tier-cta { display: block; text-align: center; margin-top: 24px; padding: 12px 20px; border-radius: var(--pill); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; }
+  .tier-cta-primary { background: var(--blue); color: var(--white); }
+  .tier-cta-primary:hover { background: var(--mid); }
+  .tier-cta-ghost { border: 1.5px solid var(--rule); color: var(--blue); }
+  .tier-cta-ghost:hover { border-color: var(--blue); }
+
+  /* CTA BAND */
+  .cta-band { background: var(--deep); padding: 64px 60px; display: grid; grid-template-columns: 1fr auto; gap: 60px; align-items: center; }
+  .cta-title { font-family: 'Playfair Display', serif; font-size: clamp(26px,3.5vw,40px); font-weight: 700; color: var(--white); line-height: 1.2; margin-bottom: 12px; }
+  .cta-sub { font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.45); line-height: 1.7; max-width: 480px; }
+  .cta-actions { display: flex; flex-direction: column; gap: 12px; align-items: flex-end; }
+  .cta-btn { background: var(--blue); color: var(--white); font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 16px 36px; border-radius: var(--pill); text-decoration: none; white-space: nowrap; }
+  .cta-btn:hover { background: var(--mid); }
+  .cta-link { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.4); text-decoration: none; text-align: right; }
+  .cta-link:hover { color: var(--white); }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-brand">I<span>J</span>M · <span>Supply Chain Justice</span></div>
+  <div class="nav-right">
+    <a href="#" class="nav-link">Our approach</a>
+    <a href="#" class="nav-link">Case studies</a>
+    <a href="#" class="nav-link">Methodology</a>
+    <a href="#" class="nav-link">For investors</a>
+    <a href="#" class="nav-cta">Talk to our team</a>
+  </div>
+</div>
+
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">IJM Supply Chain Justice Partnership</div>
+    <h1 class="hero-title">Your supply chain<br>story needs to be<br><em>verifiable.</em></h1>
+    <p class="hero-sub">Regulatory pressure is accelerating. Investors are asking harder questions. IJM embeds directly in your supply chain audit process — providing on-the-ground remediation support and producing independently verified human rights reports you can stand behind.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">Talk to our team</a>
+      <a href="#" class="btn-ghost">Download framework →</a>
+    </div>
+  </div>
+  <div class="reg-card">
+    <div class="reg-label">Regulatory tailwind — 2025–2026</div>
+    <div class="reg-title">The compliance window is closing faster than most legal teams realize.</div>
+    <div class="reg-body">The EU Corporate Sustainability Due Diligence Directive requires verified human rights due diligence across global supply chains for large companies starting 2026. US importers face escalating CBP enforcement under the Uyghur Forced Labor Prevention Act. Investor ESG scrutiny is intensifying across all sectors.</div>
+    <div class="reg-chips">
+      <div class="reg-chip">EU CS3D · 2026</div>
+      <div class="reg-chip">UFLPA enforcement</div>
+      <div class="reg-chip">SEC climate disclosure</div>
+      <div class="reg-chip">ISSB S2 alignment</div>
+    </div>
+  </div>
+</div>
+
+<div class="proof-strip">
+  <div class="proof-item">
+    <div class="proof-label">Countries with active programs</div>
+    <div class="proof-val">14</div>
+    <div class="proof-sub">On-the-ground remediation capacity</div>
+  </div>
+  <div class="proof-item">
+    <div class="proof-label">Years of supply chain work</div>
+    <div class="proof-val">25+</div>
+    <div class="proof-sub">Thailand fishing, India bonded labor, SE Asia</div>
+  </div>
+  <div class="proof-item">
+    <div class="proof-label">Third-party verification</div>
+    <div class="proof-val">100%</div>
+    <div class="proof-sub">All outcomes independently audited</div>
+  </div>
+  <div class="proof-item">
+    <div class="proof-label">Corporate partners</div>
+    <div class="proof-val">40+</div>
+    <div class="proof-sub">Active supply chain justice programs</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">What we offer</div>
+  <h2 class="section-title">Not a logo on a website.<br>A <em>verifiable</em> human rights program.</h2>
+  <p class="section-sub">IJM doesn't provide certifications. We provide on-the-ground presence, remediation support, and independently audited outcome reports — the kind of evidence that withstands regulatory scrutiny and investor due diligence.</p>
+  <div class="offer-grid">
+    <div class="offer-card">
+      <div class="offer-num">01</div>
+      <div class="offer-title">Supply chain assessment</div>
+      <div class="offer-body">IJM's in-country teams conduct direct assessment of your supply chain partners in high-risk regions — identifying forced labor exposure, documentation gaps, and remediation priorities. Not a desk audit. An on-the-ground review.</div>
+    </div>
+    <div class="offer-card">
+      <div class="offer-num">02</div>
+      <div class="offer-title">Active remediation support</div>
+      <div class="offer-body">Where exposure is identified, IJM works alongside your suppliers and local authorities to address root causes — training, legal support, worker protection protocols. This is what separates a remediation program from a monitoring program.</div>
+    </div>
+    <div class="offer-card">
+      <div class="offer-num">03</div>
+      <div class="offer-title">Verified annual reporting</div>
+      <div class="offer-body">An independently audited annual report covering assessment findings, remediation progress, and verified outcome metrics — produced to a standard your General Counsel, CSO, and investors can rely on and regulators can't challenge.</div>
+    </div>
+    <div class="offer-card">
+      <div class="offer-num">04</div>
+      <div class="offer-title">Regulatory response support</div>
+      <div class="offer-body">When a regulator, investor, or journalist asks about your supply chain human rights practices, IJM's documentation and methodology provides the credible, defensible answer. We have testified before regulatory bodies on behalf of partner companies.</div>
+    </div>
+    <div class="offer-card">
+      <div class="offer-num">05</div>
+      <div class="offer-title">Employee engagement program</div>
+      <div class="offer-body">IJM provides a structured employee education and engagement program — giving your workforce a meaningful connection to the supply chain justice work happening on their behalf. High retention and purpose correlation in partner companies.</div>
+    </div>
+    <div class="offer-card">
+      <div class="offer-num">06</div>
+      <div class="offer-title">Co-branded impact publication</div>
+      <div class="offer-body">An annual co-branded impact report — featuring your company's specific supply chain program, verified outcomes, and IJM's independent methodology statement. Designed for investor relations, ESG disclosure, and external stakeholder communication.</div>
+    </div>
+  </div>
+</div>
+
+<div class="cases-section">
+  <div class="section-label">Case studies</div>
+  <h2 class="section-title">What this looks like<br>in practice.</h2>
+  <div class="cases-grid">
+    <div class="case-card">
+      <div class="case-industry">Seafood · Thailand</div>
+      <div class="case-title">Major seafood importer — Thailand fishing supply chain</div>
+      <div class="case-body">IJM embedded alongside a major US seafood importer's Thai supplier network following 2017 research showing 38% of Thai fishing vessel workers identified as trafficking victims. Three-year remediation program including worker documentation, employer training, and legal support for identified victims.</div>
+      <div class="case-outcomes">
+        <div class="case-outcome"><div class="case-outcome-val">340+</div><div class="case-outcome-label">Workers documented and protected</div></div>
+        <div class="case-outcome"><div class="case-outcome-val">CBP</div><div class="case-outcome-label">Withhold release order avoided</div></div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-industry">Apparel · South Asia</div>
+      <div class="case-title">Global apparel brand — India textile supply chain</div>
+      <div class="case-body">Following investor pressure on forced labor exposure in Indian textile manufacturing, IJM conducted a direct assessment of tier-2 and tier-3 suppliers in Tamil Nadu. Identified bonded labor exposure in two supplier facilities, provided remediation support, and produced a verified outcome report used in the company's annual ESG disclosure.</div>
+      <div class="case-outcomes">
+        <div class="case-outcome"><div class="case-outcome-val">2</div><div class="case-outcome-label">Supplier facilities remediated</div></div>
+        <div class="case-outcome"><div class="case-outcome-val">ISSB</div><div class="case-outcome-label">S2-aligned disclosure produced</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tiers-section">
+  <div class="section-label">Partnership tiers</div>
+  <h2 class="section-title">Scaled to your<br>supply chain footprint.</h2>
+  <div class="tier-grid">
+    <div class="tier-card">
+      <div class="tier-name">Assess</div>
+      <div class="tier-price">$75K</div>
+      <div class="tier-price-sub">per year · single region</div>
+      <div class="tier-divider"></div>
+      <div class="tier-item">In-country supply chain assessment — one region</div>
+      <div class="tier-item">Risk identification and prioritization report</div>
+      <div class="tier-item">Annual independently verified findings report</div>
+      <div class="tier-item">Regulatory response documentation package</div>
+      <a href="#" class="tier-cta tier-cta-ghost">Talk to our team</a>
+    </div>
+    <div class="tier-card featured">
+      <div class="tier-badge">Most common</div>
+      <div class="tier-name">Assess + Remediate</div>
+      <div class="tier-price">$200K</div>
+      <div class="tier-price-sub">per year · up to three regions</div>
+      <div class="tier-divider"></div>
+      <div class="tier-item">Everything in Assess, across three regions</div>
+      <div class="tier-item">Active remediation support in identified facilities</div>
+      <div class="tier-item">Co-branded annual impact report</div>
+      <div class="tier-item">Employee engagement program</div>
+      <div class="tier-item">Regulatory hearing support if needed</div>
+      <a href="#" class="tier-cta tier-cta-primary">Talk to our team</a>
+    </div>
+    <div class="tier-card">
+      <div class="tier-name">Full Partnership</div>
+      <div class="tier-price">Custom</div>
+      <div class="tier-price-sub">multi-year · global program</div>
+      <div class="tier-divider"></div>
+      <div class="tier-item">Everything in Assess + Remediate, globally</div>
+      <div class="tier-item">Embedded IJM liaison within your legal or CSO team</div>
+      <div class="tier-item">Multi-year verified outcome trajectory</div>
+      <div class="tier-item">Board-level briefings and investor Q&A support</div>
+      <div class="tier-item">Named in IJM Justice Index as verified partner</div>
+      <a href="#" class="tier-cta tier-cta-ghost">Talk to our team</a>
+    </div>
+  </div>
+</div>
+
+<div class="cta-band">
+  <div>
+    <div class="cta-title">The window for getting ahead of this<br>is narrowing. Let's talk.</div>
+    <div class="cta-sub">IJM's supply chain team works with a limited number of corporate partners each year to ensure program quality and on-the-ground capacity. If you're evaluating your human rights due diligence posture for 2026, the conversation is worth having now.</div>
+  </div>
+  <div class="cta-actions">
+    <a href="#" class="cta-btn">Schedule a conversation</a>
+    <a href="#" class="cta-link">Download our methodology →</a>
+  </div>
+</div>
+
+</body>
+</html>

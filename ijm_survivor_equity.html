@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IJM Survivor Equity — Fund a Path to Freedom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1846D0; --deep: #0D2B7A; --mid: #2E5FD9;
+    --light: #E8EFFE; --bone: #F4F6FC; --rule: #D8E0F0;
+    --amber: #E07B2A; --amber-light: #FDF0E4;
+    --green: #1A7A4A; --green-light: #E6F4ED;
+    --ink: #0F0F0F; --muted: #5A6070; --white: #fff;
+    --pill: 20px 20px 20px 0; --pill-sm: 12px 12px 12px 0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bone); font-family: 'DM Sans', sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+  .nav { background: var(--deep); padding: 0 48px; display: flex; align-items: center; justify-content: space-between; height: 58px; }
+  .nav-brand { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+  .nav-brand span { color: #7EB3FF; }
+  .nav-back { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.4); text-decoration: none; }
+  .nav-back:hover { color: var(--white); }
+
+  /* HERO */
+  .hero { background: var(--deep); padding: 52px 48px 48px; display: grid; grid-template-columns: 1fr 360px; gap: 60px; align-items: end; }
+  .hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
+  .hero-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--green); display: block; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(30px,4vw,50px); font-weight: 900; color: var(--white); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 14px; }
+  .hero-title em { font-style: italic; color: #5DCAA5; }
+  .hero-sub { font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.42); line-height: 1.75; max-width: 440px; }
+
+  /* GRADUATION CARD */
+  .grad-card { background: var(--white); border-radius: var(--pill) var(--pill) 0 0; padding: 28px 28px 0; }
+  .grad-label { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .grad-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+  .grad-location { font-size: 12px; font-weight: 300; color: var(--muted); margin-bottom: 16px; }
+  .grad-timeline { display: flex; gap: 0; margin-bottom: 20px; position: relative; }
+  .grad-timeline::before { content: ''; position: absolute; top: 10px; left: 0; right: 0; height: 2px; background: var(--rule); z-index: 0; }
+  .timeline-step { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+  .timeline-dot { width: 20px; height: 20px; border-radius: 50% 50% 50% 0; border: 2px solid var(--rule); background: var(--white); display: flex; align-items: center; justify-content: center; margin-bottom: 6px; font-size: 9px; font-weight: 700; color: var(--muted); }
+  .timeline-dot.done { background: var(--blue); border-color: var(--blue); color: var(--white); }
+  .timeline-dot.current { background: var(--amber); border-color: var(--amber); color: var(--white); }
+  .timeline-dot.future { background: var(--white); border-color: var(--rule); color: var(--muted); }
+  .timeline-label { font-size: 9px; font-weight: 500; color: var(--muted); text-align: center; line-height: 1.3; letter-spacing: 0.04em; }
+  .timeline-label.done { color: var(--blue); }
+  .timeline-label.current { color: var(--amber); }
+  .grad-card-footer { display: flex; justify-content: space-between; padding: 16px 0 24px; border-top: 0.5px solid var(--rule); margin-top: 8px; }
+  .grad-stat-val { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--green); }
+  .grad-stat-label { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  /* STEPS */
+  .steps { background: var(--white); border-bottom: 1px solid var(--rule); padding: 0 48px; display: flex; }
+  .step { display: flex; align-items: center; gap: 8px; padding: 16px 20px 16px 0; margin-right: 20px; font-size: 12px; font-weight: 500; color: var(--muted); border-bottom: 2px solid transparent; }
+  .step.active { color: var(--blue); border-bottom-color: var(--blue); }
+  .step-num { width: 20px; height: 20px; border-radius: 50% 50% 50% 0; border: 1.5px solid var(--rule); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; }
+  .step.active .step-num { background: var(--blue); border-color: var(--blue); color: var(--white); }
+
+  /* MAIN */
+  .main { padding: 40px 48px 80px; display: grid; grid-template-columns: 1fr 320px; gap: 28px; align-items: start; }
+
+  /* SURVIVOR CARDS */
+  .section-label { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+  .survivor-grid { display: flex; flex-direction: column; gap: 12px; }
+  .survivor-card { background: var(--white); border: 1.5px solid var(--rule); border-radius: var(--pill); padding: 22px 26px; cursor: pointer; transition: border-color 0.15s; }
+  .survivor-card:hover { border-color: var(--blue); }
+  .survivor-card.selected { border-color: var(--blue); border-width: 2px; }
+  .sc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+  .sc-avatar { width: 44px; height: 44px; border-radius: 50% 50% 50% 0; background: var(--light); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--blue); flex-shrink: 0; }
+  .sc-name { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+  .sc-meta { font-size: 11px; font-weight: 300; color: var(--muted); }
+  .sc-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .sc-stage { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: var(--pill-sm); }
+  .stage-1 { background: var(--amber-light); color: #C05E10; }
+  .stage-2 { background: var(--light); color: var(--blue); }
+  .stage-3 { background: var(--green-light); color: var(--green); }
+  .sc-select { width: 18px; height: 18px; border-radius: 50% 50% 50% 0; border: 1.5px solid var(--rule); display: flex; align-items: center; justify-content: center; }
+  .survivor-card.selected .sc-select { background: var(--blue); border-color: var(--blue); }
+  .survivor-card.selected .sc-select::after { content: '✓'; font-size: 9px; font-weight: 700; color: var(--white); }
+  .sc-story { font-size: 13px; font-weight: 300; color: #3a3530; line-height: 1.65; margin-bottom: 16px; }
+  .sc-program { background: var(--bone); border-radius: var(--pill-sm); padding: 12px 16px; }
+  .sc-program-label { font-size: 10px; font-weight: 600; color: var(--blue); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+  .sc-milestones { display: flex; gap: 16px; }
+  .sc-milestone { font-size: 11px; font-weight: 300; color: var(--muted); display: flex; align-items: center; gap: 5px; }
+  .sc-milestone::before { content: '→'; color: var(--blue); font-weight: 600; }
+  .sc-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; }
+  .sc-cost { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--blue); }
+  .sc-cost-label { font-size: 10px; color: var(--muted); }
+  .sc-duration { font-size: 11px; font-weight: 500; color: var(--muted); background: var(--bone); padding: 4px 10px; border-radius: var(--pill-sm); }
+
+  /* SIDEBAR */
+  .sidebar { position: sticky; top: 16px; }
+  .summary-card { background: var(--white); border: 1px solid var(--rule); border-radius: var(--pill); padding: 24px; margin-bottom: 12px; }
+  .summary-title { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+  .summary-survivor { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .summary-stage { font-size: 12px; font-weight: 300; color: var(--muted); margin-bottom: 18px; }
+  .summary-divider { height: 0.5px; background: var(--rule); margin: 14px 0; }
+  .summary-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 0.5px solid var(--rule); font-size: 12px; }
+  .summary-row:last-of-type { border-bottom: none; }
+  .summary-row-label { color: var(--muted); }
+  .summary-row-val { font-weight: 500; color: var(--ink); }
+  .what-happens { background: var(--green-light); border: 1px solid rgba(26,122,74,0.15); border-radius: var(--pill); padding: 18px 20px; margin-bottom: 12px; }
+  .wh-title { font-size: 11px; font-weight: 600; color: var(--green); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .wh-item { font-size: 12px; font-weight: 300; color: #2a4a35; line-height: 1.6; margin-bottom: 7px; display: flex; gap: 8px; }
+  .wh-item::before { content: '✓'; font-weight: 700; color: var(--green); flex-shrink: 0; }
+  .commit-btn { width: 100%; background: var(--green); color: var(--white); border: none; border-radius: var(--pill); padding: 16px 24px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; margin-bottom: 10px; }
+  .commit-btn:hover { background: #145a38; }
+  .commit-note { font-size: 11px; font-weight: 300; color: var(--muted); text-align: center; line-height: 1.65; }
+
+  /* GRADUATION PROOF */
+  .grad-proof { background: var(--deep); padding: 32px 48px; display: flex; gap: 48px; align-items: center; }
+  .gp-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 8px; }
+  .gp-stat { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 700; color: #5DCAA5; line-height: 1; margin-bottom: 4px; }
+  .gp-desc { font-size: 12px; font-weight: 300; color: rgba(255,255,255,0.4); line-height: 1.5; }
+  .gp-quote { flex: 1; font-family: 'Playfair Display', serif; font-size: 16px; font-style: italic; font-weight: 400; color: rgba(255,255,255,0.5); line-height: 1.6; border-left: 2px solid rgba(93,202,165,0.4); padding-left: 20px; }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-brand">I<span>J</span>M · Survivor Equity</div>
+  <a href="#" class="nav-back">← Back to giving options</a>
+</div>
+
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">Survivor Equity — Defined Investment, Verified Outcome</div>
+    <h1 class="hero-title">Fund the path<br>from rescued<br>to <em>free.</em></h1>
+    <p class="hero-sub">Select a survivor at a specific stage of reintegration. Fund their program through to verified graduation — vocational training, legal support, economic stability. When they graduate, you'll know.</p>
+  </div>
+  <div class="grad-card">
+    <div class="grad-label">Recent graduation</div>
+    <div class="grad-name">Priya R.</div>
+    <div class="grad-location">Tamil Nadu, India · Graduated March 2025</div>
+    <div class="grad-timeline">
+      <div class="timeline-step">
+        <div class="timeline-dot done">✓</div>
+        <div class="timeline-label done">Rescued</div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot done">✓</div>
+        <div class="timeline-label done">Trauma care</div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot done">✓</div>
+        <div class="timeline-label done">Legal support</div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot done">✓</div>
+        <div class="timeline-label done">Vocational</div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot done">✓</div>
+        <div class="timeline-label done">Graduated</div>
+      </div>
+    </div>
+    <div class="grad-card-footer">
+      <div><div class="grad-stat-val">28 months</div><div class="grad-stat-label">Program duration</div></div>
+      <div style="text-align:right"><div class="grad-stat-val">Self-sufficient</div><div class="grad-stat-label">Verified outcome</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="steps">
+  <div class="step active"><div class="step-num">1</div>Select survivor</div>
+  <span style="color:var(--rule);padding:16px 8px">›</span>
+  <div class="step"><div class="step-num">2</div>Choose commitment</div>
+  <span style="color:var(--rule);padding:16px 8px">›</span>
+  <div class="step"><div class="step-num">3</div>Confirm and connect</div>
+</div>
+
+<div class="main">
+  <div>
+    <div class="section-label">Survivors currently in program — select to fund</div>
+    <div class="survivor-grid">
+
+      <div class="survivor-card selected" onclick="selectSurvivor(this,'Alice M.','Nairobi, Kenya · Stage 2: Vocational training','Stage 2','$75/month · 14 months remaining')">
+        <div class="sc-top">
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div class="sc-avatar">A</div>
+            <div>
+              <div class="sc-name">Alice M.*</div>
+              <div class="sc-meta">Nairobi, Kenya · Sexual violence survivor · Age 24</div>
+            </div>
+          </div>
+          <div class="sc-right">
+            <div class="sc-stage stage-2">Stage 2 — Vocational</div>
+            <div class="sc-select"></div>
+          </div>
+        </div>
+        <div class="sc-story">"IJM opened my mind to many things. At the time I felt I was alone — they showed me I have strength to survive on my own." Alice completed trauma counseling and legal support. She is now 8 months into a tailoring vocational program with a confirmed employer placement at graduation.</div>
+        <div class="sc-program">
+          <div class="sc-program-label">Remaining program milestones</div>
+          <div class="sc-milestones">
+            <div class="sc-milestone">Complete vocational cert.</div>
+            <div class="sc-milestone">6-month employer placement</div>
+            <div class="sc-milestone">Verified self-sufficiency</div>
+          </div>
+        </div>
+        <div class="sc-footer">
+          <div><div class="sc-cost">$75<span style="font-size:14px;font-weight:400;color:var(--muted)">/mo</span></div><div class="sc-cost-label">14 months to graduation</div></div>
+          <div class="sc-duration">Est. graduation: May 2026</div>
+        </div>
+      </div>
+
+      <div class="survivor-card" onclick="selectSurvivor(this,'Ravi K. family*','Tamil Nadu, India · Stage 1: Trauma care + legal','Stage 1','$120/month · 22 months remaining')">
+        <div class="sc-top">
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div class="sc-avatar" style="background:var(--amber-light);color:var(--amber)">R</div>
+            <div>
+              <div class="sc-name">Ravi K. family*</div>
+              <div class="sc-meta">Tamil Nadu, India · Bonded labor survivors · Family of 5</div>
+            </div>
+          </div>
+          <div class="sc-right">
+            <div class="sc-stage stage-1">Stage 1 — Recovery</div>
+            <div class="sc-select"></div>
+          </div>
+        </div>
+        <div class="sc-story">Freed from 11 years of bonded labor in a brick kiln in early 2024. Father Ravi and his four children are currently in trauma counseling and legal support. The family is awaiting formal freedom documentation from local authorities before vocational placement can begin.</div>
+        <div class="sc-program">
+          <div class="sc-program-label">Remaining program milestones</div>
+          <div class="sc-milestones">
+            <div class="sc-milestone">Legal documentation</div>
+            <div class="sc-milestone">Vocational placement</div>
+            <div class="sc-milestone">Economic reintegration</div>
+          </div>
+        </div>
+        <div class="sc-footer">
+          <div><div class="sc-cost">$120<span style="font-size:14px;font-weight:400;color:var(--muted)">/mo</span></div><div class="sc-cost-label">22 months to graduation</div></div>
+          <div class="sc-duration">Est. graduation: Feb 2027</div>
+        </div>
+      </div>
+
+      <div class="survivor-card" onclick="selectSurvivor(this,'Maria T.*','Manila, Philippines · Stage 3: Employment + independence','Stage 3','$50/month · 6 months remaining')">
+        <div class="sc-top">
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div class="sc-avatar" style="background:var(--green-light);color:var(--green)">M</div>
+            <div>
+              <div class="sc-name">Maria T.*</div>
+              <div class="sc-meta">Manila, Philippines · OSEC survivor · Age 19</div>
+            </div>
+          </div>
+          <div class="sc-right">
+            <div class="sc-stage stage-3">Stage 3 — Final stretch</div>
+            <div class="sc-select"></div>
+          </div>
+        </div>
+        <div class="sc-story">Maria was identified at age 16 through IJM's OSEC program. She has completed trauma care, legal advocacy, and a full secondary education through the IJM aftercare campus in Nairobi. She is currently 6 months from program graduation — employed part-time and meeting all independence benchmarks.</div>
+        <div class="sc-program">
+          <div class="sc-program-label">Remaining milestones</div>
+          <div class="sc-milestones">
+            <div class="sc-milestone">6-month employment verification</div>
+            <div class="sc-milestone">Final independence assessment</div>
+          </div>
+        </div>
+        <div class="sc-footer">
+          <div><div class="sc-cost">$50<span style="font-size:14px;font-weight:400;color:var(--muted)">/mo</span></div><div class="sc-cost-label">6 months to graduation</div></div>
+          <div class="sc-duration">Est. graduation: Oct 2025</div>
+        </div>
+      </div>
+
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:16px;line-height:1.6">* Names and identifying details changed to protect privacy. Stories are real. Outcomes are independently verified through IJM's Assessment of Survivor Outcomes tool.</div>
+  </div>
+
+  <div class="sidebar">
+    <div class="summary-card">
+      <div class="summary-title">Your commitment</div>
+      <div class="summary-survivor" id="sumName">Alice M.</div>
+      <div class="summary-stage" id="sumStage">Nairobi, Kenya · Stage 2: Vocational training</div>
+      <div class="summary-divider"></div>
+      <div class="summary-row"><div class="summary-row-label">Monthly gift</div><div class="summary-row-val" id="sumAmount">$75/month</div></div>
+      <div class="summary-row"><div class="summary-row-label">Timeline</div><div class="summary-row-val">14 months to graduation</div></div>
+      <div class="summary-row"><div class="summary-row-label">Total commitment</div><div class="summary-row-val">$1,050</div></div>
+      <div class="summary-row"><div class="summary-row-label">Outcome verification</div><div class="summary-row-val">Third-party audited</div></div>
+    </div>
+    <div class="what-happens">
+      <div class="wh-title">What happens when they graduate</div>
+      <div class="wh-item">You receive a final verified outcome report on their program completion</div>
+      <div class="wh-item">A third-party auditor confirms economic self-sufficiency</div>
+      <div class="wh-item">Your giving relationship closes — with resolution, not just renewal</div>
+      <div class="wh-item">You can choose to fund the next survivor in the program</div>
+    </div>
+    <button class="commit-btn">Fund Alice's Path to Freedom</button>
+    <div class="commit-note">Monthly gift. Cancel with 30 days notice.<br>Outcome independently verified at graduation.</div>
+  </div>
+</div>
+
+<div class="grad-proof">
+  <div><div class="gp-label">Graduates to date</div><div class="gp-stat">2,400+</div><div class="gp-desc">Survivors who have completed the full program and achieved verified self-sufficiency</div></div>
+  <div><div class="gp-label">Verification tool</div><div class="gp-stat">ASO</div><div class="gp-desc">IJM's externally validated Assessment of Survivor Outcomes — the only peer-reviewed survivor reintegration tool in the sector</div></div>
+  <div class="gp-quote">"The closing report we received wasn't just a thank-you. It was a full account of where she was, what she'd built, and what came next for her. That's the moment we decided to fund another." — Justice Bonds donor, 2024</div>
+</div>
+
+<script>
+function selectSurvivor(card, name, stage, stageClass, amount) {
+  document.querySelectorAll('.survivor-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  document.getElementById('sumName').textContent = name;
+  document.getElementById('sumStage').textContent = stage;
+  document.getElementById('sumAmount').textContent = amount;
+  const btn = document.querySelector('.commit-btn');
+  btn.textContent = 'Fund ' + name.split(' ')[0] + "'s Path to Freedom";
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IJM Justice Cohorts — Bring Your Community</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1846D0; --deep: #0D2B7A; --mid: #2E5FD9;
+    --light: #E8EFFE; --bone: #F4F6FC; --rule: #D8E0F0;
+    --amber: #E07B2A; --amber-light: #FDF0E4;
+    --ink: #0F0F0F; --muted: #5A6070; --white: #fff;
+    --pill: 20px 20px 20px 0; --pill-sm: 12px 12px 12px 0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bone); font-family: 'DM Sans', sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+  .nav { background: var(--deep); padding: 0 60px; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .nav-brand { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+  .nav-brand span { color: #7EB3FF; }
+  .nav-back { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.45); text-decoration: none; letter-spacing: 0.06em; }
+  .nav-back:hover { color: var(--white); }
+
+  /* HERO */
+  .hero { background: var(--deep); padding: 64px 60px 0; display: grid; grid-template-columns: 1fr 380px; gap: 60px; align-items: end; }
+  .hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+  .hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--amber); }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(32px,4vw,54px); font-weight: 900; color: var(--white); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 16px; }
+  .hero-title em { font-style: italic; color: var(--amber); }
+  .hero-sub { font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.42); line-height: 1.75; margin-bottom: 48px; max-width: 480px; }
+  /* Hero card — floats up into the content */
+  .hero-card { background: var(--white); border-radius: var(--pill) var(--pill) 0 0; padding: 32px 32px 0; align-self: flex-end; }
+  .hero-card-label { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .hero-cohort-name { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .hero-cohort-sub { font-size: 13px; font-weight: 300; color: var(--muted); margin-bottom: 20px; }
+  .hero-members { display: flex; gap: 8px; align-items: center; margin-bottom: 20px; }
+  .member-avatar { width: 32px; height: 32px; border-radius: 50% 50% 50% 0; border: 2px solid var(--white); background: var(--light); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--blue); margin-left: -8px; }
+  .member-avatar:first-child { margin-left: 0; }
+  .member-count { font-size: 12px; font-weight: 500; color: var(--muted); margin-left: 4px; }
+  .hero-progress { }
+  .hero-progress-label { display: flex; justify-content: space-between; font-size: 11px; font-weight: 500; color: var(--muted); margin-bottom: 6px; }
+  .hero-progress-track { height: 6px; background: var(--rule); border-radius: 3px 3px 3px 0; overflow: hidden; }
+  .hero-progress-fill { height: 100%; background: var(--amber); border-radius: 3px 3px 3px 0; width: 0; transition: width 1s ease 0.5s; }
+  .hero-card-footer { display: flex; align-items: center; justify-content: space-between; padding: 16px 0 24px; border-top: 0.5px solid var(--rule); margin-top: 20px; }
+  .hero-card-stat { }
+  .hero-card-stat-val { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--blue); }
+  .hero-card-stat-label { font-size: 10px; color: var(--muted); letter-spacing: 0.04em; }
+
+  /* MAIN */
+  .main { padding: 48px 60px 80px; }
+
+  /* HOW IT WORKS */
+  .how-label { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; }
+  .how-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 56px; }
+  .how-card { background: var(--white); border: 1px solid var(--rule); border-radius: var(--pill); padding: 24px 22px; border-top: 3px solid var(--blue); }
+  .how-num { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 900; color: rgba(24,70,208,0.1); line-height: 1; margin-bottom: 12px; letter-spacing: -0.04em; }
+  .how-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 8px; line-height: 1.3; }
+  .how-body { font-size: 12px; font-weight: 300; color: var(--muted); line-height: 1.65; }
+
+  /* FORM */
+  .form-grid { display: grid; grid-template-columns: 1fr 360px; gap: 40px; align-items: start; }
+  .form-section-label { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 0.5px solid var(--rule); }
+  .form-group { margin-bottom: 20px; }
+  .form-label { font-size: 12px; font-weight: 500; color: var(--ink); margin-bottom: 7px; display: block; letter-spacing: 0.02em; }
+  .form-label span { color: var(--muted); font-weight: 300; }
+  .form-input { width: 100%; border: 1.5px solid var(--rule); border-radius: var(--pill-sm); padding: 12px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink); background: var(--white); transition: border-color 0.15s; outline: none; }
+  .form-input:focus { border-color: var(--blue); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235A6070' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px; }
+
+  /* REGION SELECTOR */
+  .region-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 8px; }
+  .region-opt { border: 1.5px solid var(--rule); border-radius: var(--pill-sm); padding: 14px 16px; cursor: pointer; transition: all 0.15s; }
+  .region-opt:hover { border-color: var(--amber); }
+  .region-opt.selected { border-color: var(--amber); background: var(--amber-light); }
+  .region-name { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+  .region-focus { font-size: 11px; font-weight: 300; color: var(--muted); line-height: 1.4; }
+  .region-opt.selected .region-name { color: #C05E10; }
+
+  /* COMMITMENT SLIDER */
+  .commitment-row { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; }
+  .commitment-val { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--blue); min-width: 80px; text-align: right; }
+  input[type=range] { width: 100%; accent-color: var(--blue); cursor: pointer; }
+
+  /* SIDEBAR SUMMARY */
+  .sidebar-card { background: var(--white); border: 1px solid var(--rule); border-radius: var(--pill); padding: 28px; margin-bottom: 14px; }
+  .sidebar-title { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .sidebar-row { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 0; border-bottom: 0.5px solid var(--rule); }
+  .sidebar-row:last-of-type { border-bottom: none; }
+  .sidebar-row-label { font-size: 12px; font-weight: 400; color: var(--muted); }
+  .sidebar-row-val { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .what-you-get { background: var(--light); border: 1px solid var(--rule); border-radius: var(--pill); padding: 20px 24px; margin-bottom: 14px; }
+  .wyg-title { font-size: 12px; font-weight: 600; color: var(--blue); margin-bottom: 14px; letter-spacing: 0.04em; }
+  .wyg-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; font-size: 12px; font-weight: 300; color: #3a3530; line-height: 1.5; }
+  .wyg-item::before { content: '✓'; font-size: 11px; font-weight: 600; color: var(--blue); flex-shrink: 0; margin-top: 1px; }
+  .submit-btn { width: 100%; background: var(--amber); color: var(--white); border: none; border-radius: var(--pill); padding: 18px 24px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; margin-bottom: 12px; }
+  .submit-btn:hover { background: #C05E10; }
+  .submit-note { font-size: 11px; font-weight: 300; color: var(--muted); text-align: center; line-height: 1.65; }
+
+  /* EXISTING COHORTS */
+  .cohorts-section { margin-top: 56px; }
+  .cohorts-label { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cohorts-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+  .cohort-card { background: var(--white); border: 1px solid var(--rule); border-radius: var(--pill); padding: 20px 22px; }
+  .cohort-type { font-size: 9px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); margin-bottom: 6px; }
+  .cohort-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .cohort-location { font-size: 12px; font-weight: 300; color: var(--muted); margin-bottom: 14px; }
+  .cohort-progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+  .cohort-track { height: 4px; background: var(--rule); border-radius: 2px 2px 2px 0; overflow: hidden; }
+  .cohort-fill { height: 100%; background: var(--amber); border-radius: 2px 2px 2px 0; }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-brand">I<span>J</span>M · Justice Cohorts</div>
+  <a href="#" class="nav-back">← Back to giving options</a>
+</div>
+
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">Justice Cohorts — Community Giving</div>
+    <h1 class="hero-title">Your community.<br>One <em>mission.</em><br>Twelve months.</h1>
+    <p class="hero-sub">Bring your church, small group, or campus ministry into a year-long commitment tied to a named region — with a dedicated field contact, quarterly field dispatches, and a closing impact summary when the year ends.</p>
+  </div>
+  <div class="hero-card">
+    <div class="hero-card-label">Example cohort in progress</div>
+    <div class="hero-cohort-name">Redeemer Brooklyn</div>
+    <div class="hero-cohort-sub">Church small group · South Asia program</div>
+    <div class="hero-members">
+      <div class="member-avatar">JR</div>
+      <div class="member-avatar">KL</div>
+      <div class="member-avatar">MT</div>
+      <div class="member-avatar">AS</div>
+      <div class="member-avatar">+</div>
+      <div class="member-count">14 members giving</div>
+    </div>
+    <div class="hero-progress">
+      <div class="hero-progress-label"><span>Year goal</span><span style="color:var(--amber);font-weight:600" id="progressPct">68% raised</span></div>
+      <div class="hero-progress-track"><div class="hero-progress-fill" id="heroFill"></div></div>
+    </div>
+    <div class="hero-card-footer">
+      <div class="hero-card-stat"><div class="hero-card-stat-val">$13,600</div><div class="hero-card-stat-label">raised of $20,000 goal</div></div>
+      <div class="hero-card-stat" style="text-align:right"><div class="hero-card-stat-val">4</div><div class="hero-card-stat-label">months remaining</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="how-label">How it works</div>
+  <div class="how-grid">
+    <div class="how-card"><div class="how-num">01</div><div class="how-title">Your group sets a goal</div><div class="how-body">Commit to a 12-month collective giving target. IJM assigns a named region and outcome matched to your commitment level.</div></div>
+    <div class="how-card"><div class="how-num">02</div><div class="how-title">Meet your field contact</div><div class="how-body">An actual IJM field team member — not a donor rep — sends your group quarterly updates and joins a call once a year.</div></div>
+    <div class="how-card"><div class="how-num">03</div><div class="how-title">Share within your community</div><div class="how-body">IJM provides a story package and sharing toolkit. Your community distributes it. The work spreads through your network, not ours.</div></div>
+    <div class="how-card"><div class="how-num">04</div><div class="how-title">Close the year together</div><div class="how-body">Year-end impact summary tied to your specific region. Then decide — renew the commitment, or let someone else in your network take the next cohort.</div></div>
+  </div>
+
+  <div class="form-grid">
+    <div>
+      <div class="form-section-label">Tell us about your group</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Group or community name</label>
+          <input class="form-input" type="text" placeholder="e.g. Redeemer Brooklyn Small Group">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Group type</label>
+          <select class="form-input form-select">
+            <option>Church</option>
+            <option>Small group</option>
+            <option>Campus ministry</option>
+            <option>Corporate giving circle</option>
+            <option>Law firm / professional group</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Your name</label>
+          <input class="form-input" type="text" placeholder="First and last name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" placeholder="you@yourgroup.org">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Approx. group size <span>(helps us match you to the right field contact)</span></label>
+        <select class="form-input form-select">
+          <option>Under 10 people</option>
+          <option selected>10–30 people</option>
+          <option>30–100 people</option>
+          <option>100+ people (full congregation)</option>
+        </select>
+      </div>
+
+      <div class="form-section-label" style="margin-top:32px">Choose your region</div>
+      <div class="region-grid">
+        <div class="region-opt selected" onclick="selectRegion(this)">
+          <div class="region-name">South Asia</div>
+          <div class="region-focus">Bonded labor · Forced labor</div>
+        </div>
+        <div class="region-opt" onclick="selectRegion(this)">
+          <div class="region-name">East Africa</div>
+          <div class="region-focus">Sexual violence · Police accountability</div>
+        </div>
+        <div class="region-opt" onclick="selectRegion(this)">
+          <div class="region-name">Southeast Asia</div>
+          <div class="region-focus">Online child exploitation</div>
+        </div>
+        <div class="region-opt" onclick="selectRegion(this)">
+          <div class="region-name">Latin America</div>
+          <div class="region-focus">Trafficking · Sexual violence</div>
+        </div>
+        <div class="region-opt" onclick="selectRegion(this)">
+          <div class="region-name">Eastern Europe</div>
+          <div class="region-focus">Conflict-driven trafficking</div>
+        </div>
+        <div class="region-opt" onclick="selectRegion(this)">
+          <div class="region-name">Let IJM assign</div>
+          <div class="region-focus">Matched to highest need</div>
+        </div>
+      </div>
+
+      <div class="form-section-label" style="margin-top:32px">Set your group's giving goal</div>
+      <div class="form-group">
+        <label class="form-label">Annual commitment <span>(minimum $5,000 for dedicated field contact)</span></label>
+        <div class="commitment-row">
+          <input type="range" min="5000" max="100000" step="5000" value="20000" oninput="updateCommitment(this.value)">
+          <div class="commitment-val" id="commitmentVal">$20,000</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-title">Your cohort summary</div>
+        <div class="sidebar-row"><div class="sidebar-row-label">Group type</div><div class="sidebar-row-val">Small group</div></div>
+        <div class="sidebar-row"><div class="sidebar-row-label">Region</div><div class="sidebar-row-val" id="summaryRegion">South Asia</div></div>
+        <div class="sidebar-row"><div class="sidebar-row-label">Commitment</div><div class="sidebar-row-val" id="summaryCommitment">$20,000 / year</div></div>
+        <div class="sidebar-row"><div class="sidebar-row-label">Duration</div><div class="sidebar-row-val">12 months</div></div>
+        <div class="sidebar-row"><div class="sidebar-row-label">Field contact</div><div class="sidebar-row-val">Assigned on approval</div></div>
+      </div>
+      <div class="what-you-get">
+        <div class="wyg-title">What your cohort receives</div>
+        <div class="wyg-item">Named region assignment within 5 business days</div>
+        <div class="wyg-item">Dedicated field team member as your cohort contact</div>
+        <div class="wyg-item">Quarterly field dispatches — photos, case updates, impact data</div>
+        <div class="wyg-item">Annual virtual call with your field contact</div>
+        <div class="wyg-item">Regional story package and community sharing toolkit</div>
+        <div class="wyg-item">Year-end impact summary report for your group</div>
+      </div>
+      <button class="submit-btn">Start Your Cohort</button>
+      <div class="submit-note">IJM will follow up within 2 business days to confirm your region assignment and introduce your field contact.</div>
+    </div>
+  </div>
+
+  <div class="cohorts-section">
+    <div class="cohorts-label">Active cohorts — join the movement</div>
+    <div class="cohorts-grid">
+      <div class="cohort-card">
+        <div class="cohort-type">Campus ministry</div>
+        <div class="cohort-name">Wheaton College IJM Chapter</div>
+        <div class="cohort-location">Wheaton, IL · Southeast Asia program</div>
+        <div class="cohort-progress-label"><span>Year progress</span><span style="color:var(--amber);font-weight:500">Month 9 of 12</span></div>
+        <div class="cohort-track"><div class="cohort-fill" style="width:75%"></div></div>
+      </div>
+      <div class="cohort-card">
+        <div class="cohort-type">Church small group</div>
+        <div class="cohort-name">Grace Chapel — Justice Group</div>
+        <div class="cohort-location">Lexington, MA · East Africa program</div>
+        <div class="cohort-progress-label"><span>Year progress</span><span style="color:var(--amber);font-weight:500">Month 5 of 12</span></div>
+        <div class="cohort-track"><div class="cohort-fill" style="width:42%"></div></div>
+      </div>
+      <div class="cohort-card">
+        <div class="cohort-type">Law firm</div>
+        <div class="cohort-name">Latham & Watkins Pro Bono</div>
+        <div class="cohort-location">Washington, DC · Latin America program</div>
+        <div class="cohort-progress-label"><span>Year progress</span><span style="color:var(--amber);font-weight:500">Month 2 of 12</span></div>
+        <div class="cohort-track"><div class="cohort-fill" style="width:17%"></div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+window.addEventListener('load', () => {
+  document.getElementById('heroFill').style.width = '68%';
+});
+function updateCommitment(val) {
+  const formatted = '$' + parseInt(val).toLocaleString();
+  document.getElementById('commitmentVal').textContent = formatted;
+  document.getElementById('summaryCommitment').textContent = formatted + ' / year';
+}
+function selectRegion(opt) {
+  document.querySelectorAll('.region-opt').forEach(o => o.classList.remove('selected'));
+  opt.classList.add('selected');
+  document.getElementById('summaryRegion').textContent = opt.querySelector('.region-name').textContent;
+}
+</script>
+</body>
+</html>
